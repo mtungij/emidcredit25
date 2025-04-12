@@ -77,9 +77,9 @@
                                  
                                <?php
                                $empl_loan = $this->queries->get_loan_empl_data($oficer_datas->empl_id);
-                               echo "<pre>";
-                               print_r($empl_loan);
-                                     exit();
+                            //    echo "<pre>";
+                            //    print_r($empl_loan);
+                            //          exit();
                                 ?>
                                 <?php $no = 1; ?>
                                 <?php foreach ($empl_loan as $empl_loans): ?>
