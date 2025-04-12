@@ -121,6 +121,19 @@
                     </div>
                 </div>
 
+                <div class="col-lg-3 col-md-12">
+                    <div class="card top_counter currency_state">
+                        <div class="body">
+                                <div class="icon"><img src="https://www.wrraptheme.com/templates/lucid/html/assets/images/coin/neo.svg" width="35" /></div>
+                            <div class="content">
+                           
+                                <div class="text"><strong>RIBA ILIYOKUSANYWA</strong></div>
+                                <h5 class="number"><?= number_format($monthly_interest) ?></h5>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
                
 
                 <div class="col-lg-3 col-md-6">
@@ -140,7 +153,7 @@
                                 <div class="icon"><img src="https://www.wrraptheme.com/templates/lucid/html/assets/images/coin/stellar.svg" width="35" /></div>
                             <div class="content">
                                 <div class="text"><strong>MALAZO JUMLA</strong></div>
-                                <h5 class="number"><?= number_format($total_malazo) ?></h5>
+                                <h5 class="number"><?= number_format($total_malazo) ?></h5>  
                             </div>
                         </div>
                     </div>

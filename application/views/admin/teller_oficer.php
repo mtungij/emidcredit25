@@ -77,9 +77,9 @@
                                  
                                <?php
                                $empl_loan = $this->queries->get_loan_empl_data($oficer_datas->empl_id);
-                            //    echo "<pre>";
-                            //    print_r($empl_loan);
-                            //          exit();
+                               echo "<pre>";
+                               print_r($empl_loan);
+                                     exit();
                                 ?>
                                 <?php $no = 1; ?>
                                 <?php foreach ($empl_loan as $empl_loans): ?>
@@ -112,34 +112,7 @@
                                    </tr>
                                     <?php endforeach; ?>
                                     <?php $total_work_individual = $this->queries->get_total_depost_individual($oficer_datas->empl_id); ?>
-                                    <?php foreach ($total_work_individual as $total_work_individuals): ?>
-                                    	
-                                   
-                                    <tr>
-                                    <td></td>
-				  					<td></td>
-				  					<td class="c"><b>TOTAL</b> </td>
-				  					<td class="c"></td>
-				  					<td></td>
-				  						
-				  					<td>
-				  						<?php //if($empl_loans->day == '1'){ ?>
-				  							<?php //echo "Daily"; ?>
-				  						<?php //}elseif ($empl_loans->day == '7'){
-				  							//echo "Weekly";
-				  						 ?>
-				  						 <?php //}elseif ($empl_loans->day == '30' || $empl_loans->day == '31' || $empl_loans->day == '28' || $empl_loans->day == '29') {
-				  						 	//echo "Monthly";
-				  						  ?>
-				  						  <?php //} ?>
-				  					</td>
-				  					<td></td> 
-				  					<td><b><?php echo number_format($total_work_individuals->total_depost_individual); ?></b></td>
-				  					<td></td> 
-				  					<td><b><?php echo number_format($total_work_individuals->total_withdrawal_individual); ?></b></td> 
-				  					<td></td>	
-                                    </tr>
-                                  <?php endforeach; ?>
+                                    
                                    <tr>
                                     <td></td>
 				  					<td></td>
@@ -166,30 +139,7 @@
                                     </tr>
                                     <?php $group_empl = $this->queries->get_empl_group_depost($oficer_datas->empl_id);?>
                                  <?php foreach ($group_empl as $group_empls): ?>
-                                     <tr>
-                                    <td></td>
-				  					<td><?php echo $group_empls->group_name; ?></td>
-				  					<td class="c"></td>
-				  					<td class="c"></td>
-                                  	
-				  					<td>
-				  						<?php //if($empl_loans->day == '1'){ ?>
-				  							<?php //echo "Daily"; ?>
-				  						<?php //}elseif ($empl_loans->day == '7'){
-				  							//echo "Weekly";
-				  						 ?>
-				  						 <?php //}elseif ($empl_loans->day == '30' || $empl_loans->day == '31' || $empl_loans->day == '28' || $empl_loans->day == '29') {
-				  						 	//echo "Monthly";
-				  						  ?>
-				  						  <?php //} ?>
-				  					</td>
-				  					<td></td> 
-				  					<td><b><?php //echo number_format($total_work_individuals->total_depost_individual); ?></b></td>
-				  					<td></td> 
-				  					<td><b><?php //echo number_format($total_work_individuals->total_withdrawal_individual); ?></b></td> 
-				  					<td></td>	
-				  					<td></td>	
-                                    </tr>
+                                    
 
                                <?php $member_group = $this->queries->member_group($group_empls->group_id); ?>
                                <?php $nos = 1; ?>
@@ -259,7 +209,7 @@
                                   	<td style="color:green;"><b>OFFICER TOTAL REPAYMENT:</b></td>
 				  					<td><b></b></td>
 				  					<td class="c"></td>
-				  					<td class="c"></td>
+				  					
                                   	
 				  					<td></td>
 				  					<td><?php //if($member_groups->day == '1'){ ?>

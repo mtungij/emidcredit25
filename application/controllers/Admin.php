@@ -91,6 +91,7 @@ class Admin extends CI_Controller {
   'total_monthly_income' =>$total_monthly_income ,
   'today_deposit'=> $today_deposit,
   'today_principal' =>  $today_principal,
+  'monthly_interest'=> $monthly_interest,
   'today_interest' =>  $today_interest,
    'rejesho' => $rejesho , 'total_malazo' => $total_malazo, 'total_remain_amount' => $total_remain_amount,
   'total_zidi'=>$total_zidi]);
