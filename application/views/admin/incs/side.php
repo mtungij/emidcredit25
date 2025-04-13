@@ -138,6 +138,7 @@
                                 <ul>
                                     <li><a href="<?php echo base_url("admin/cash_transaction") ?>">General Transactions</a></li>
                                     <li><a href="<?php echo base_url("admin/penalt_payments") ?>">Penalt Payments</a></li>
+                                    <li><a href="<?php echo base_url("admin/interest_payments") ?>">Principal & Interest collection</a></li>
                                     <li><a href="<?php echo base_url("admin/teller_transaction") ?>">Teller Officer Cash Transaction</a></li>
                                     <li><a href="<?php echo base_url("admin/branch_trans") ?>">Branchwise Transactions</a></li>
                                 </ul>

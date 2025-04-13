@@ -2158,28 +2158,57 @@ $this->load->view('admin/search_customer',['customer'=>$customer,'sponser'=>$spo
 
     public function aprove_loan($loan_id){
     	$this->load->helper('string');
+      $this->load->model('queries');
+      $comp_id = $this->session->userdata('comp_id');
+      $compdata = $this->queries->get_companyData($comp_id);
+      //   echo "<pre>";
+      // print_r($compdata);
+      //  echo "</pre>";
+      //   exit();
             //Prepare array of user data
     	$day = date('Y-m-d H:i');
+      $loan_details = $this->queries->get_loansms($loan_id);
+      
+      // echo "<pre>";
+      // print_r($loan_details);
+      //  echo "</pre>";
+      //   exit();
+
+      if ($loan_details) {
+          // Correctly accessing database fields
+          $first_name = $loan_details->f_name;  
+          $m_name = $loan_details->m_name;  
+          $l_name = $loan_details->l_name;  
+          $phone = $loan_details->phone_no; // Ensure this column exists
+          $amount = $loan_details->how_loan;
+          $company_name = $compdata->comp_name;
+      
+      } else {
+          echo "Loan details not found!";
+      }
+       
+    
+     
+
+      $day = date('Y-m-d H:i');
       $approval_code = random_string('numeric', 3);
+       
             $data = array(
             'loan_aprove'=> $this->input->post('how_loan'),
             'penat_status'=> $this->input->post('penat_status'),
             'loan_status'=> 'aproved',
             'loan_day' => $day,
-            'code' => random_string('numeric',4),
+            'code' => $approval_code,
            
             );
             //   echo "<pre>";
             // print_r($data);
             //  echo "</pre>";
             //   exit();
-
-             
-                  $massage = "Mpendwa $first_name $m_name $l_name, mkopo wako uliopitishwa kutoka $company_name ni Tsh $amount. Namba yako ya uthibitisho kwa ajili ya kupokea mkopo ni: $approval_code";
-              
-             
-                 $this->sendsms($phone, $massage);
-            
+            $massage = "Mpendwa $first_name $m_name $l_name, mkopo wako uliopitishwa kutoka $company_name ni Tsh $amount. Namba yako ya uthibitisho kwa ajili ya kupokea mkopo ni: $approval_code";
+        
+       
+           $this->sendsms($phone, $massage);
             //Pass user data to model
             $this->load->model('queries'); 
             $data = $this->queries->update_status($loan_id,$data);
@@ -2191,6 +2220,17 @@ $this->load->view('admin/search_customer',['customer'=>$customer,'sponser'=>$spo
             //   exit();
             //Storing insertion status message.
             if($data){
+
+             
+              $massage = "Mpendwa $first_name $m_name $l_name, mkopo wako uliokubaliwa ni Tsh $amount. Namba yako ya uthibitisho kwa ajili ya kupokea mkopo ni: $approval_code. Asante!";
+        
+            //    echo "<pre>";
+            // print_r($massage);
+            //  echo "</pre>";
+            //   exit();
+            //Storing in
+              // Call SMS function
+              $this->send_sms($phone, $massage);
             	
                 $this->session->set_flashdata('massage','Loan Approved successfully');
             }else{
@@ -2792,13 +2832,14 @@ public function disburse($loan_id){
       $datas = $this->queries->get_previous_comp_loan_with($from, $to, $comp_id, $loan_status);
       $sumloan_withdrawal = $this->queries->get_previous_comploan_with_total($from, $to, $comp_id, $loan_status);
       $blanch_data = $this->queries->get_blanch_data($blanch_id);
+     
         // echo "<pre>";
 		    // print_r($datas );
 		    // echo "</pre>";
 		    //     exit();
     } else {
       $data = $this->queries->get_previous_loan_with($from,$to,$blanch_id,$loan_status);
-    
+      $blanch_data = $this->queries->get_blanch_data($blanch_id);
       $sum_loan_withdrawal = $this->queries->get_previous_loan_with_total($from,$to,$blanch_id,$loan_status);
     }
     
@@ -9782,6 +9823,70 @@ public function teller_transaction(){
   //  print_r($cash_account);
   //           exit();
   $this->load->view('admin/teller_oficer',['empl_oficer'=>$empl_oficer,'total_deposit'=>$total_deposit,'total_withdrawal'=>$total_withdrawal,'cash_account'=>$cash_account]);
+}
+
+
+public function interest_payments()
+{
+  $this->load->model('queries');
+  $comp_id = $this->session->userdata('comp_id');
+ $today_profit = $this->queries->get_depost_with_interest_principal_customer($comp_id);
+ $blanch = $this->queries->get_blanch($comp_id);
+//  echo "<pre>";
+//    print_r( $today_profit);
+//             exit();
+
+  $this->load->view('admin/interest_payments',['today_profit'=>$today_profit,'blanch'=>$blanch]);
+}
+
+public function filter_interest_paid ()
+{
+
+  $this->load->model('queries');
+  $comp_id = $this->session->userdata('comp_id');
+  $blanch = $this->queries->get_blanch($comp_id);
+  $blanch_id = $this->input->post('blanch_id');
+  $from = $this->input->post('from');
+  $to = $this->input->post('to');
+
+
+  $data = [];
+  $datas = [];
+  $sumloan_withdrawal = null;
+  $sum_loan_withdrawal = null;
+  $blanch_data = null;
+
+  if ($blanch_id == "all") {
+    $datas = $this->queries->get_depost_filtered_interest_principal_customer($from, $to, $comp_id);
+      $blanch_data = $this->queries->get_blanch_data($blanch_id);
+    // echo "<pre>";
+    //  print_r($datas);
+    //  echo "<pre>";
+    //      exit();
+    // $sumloan_withdrawal = $this->queries->get_previous_comploan_with_total($from, $to, $comp_id, $loan_status);
+ 
+  }
+  else {
+    $data = $this->queries->get_branch_depost_with_interest_principal_customer($from, $to, $blanch_id);
+     $blanch_data = $this->queries->get_blanch_data($blanch_id);
+    //    echo "<pre>";
+    //  print_r($data);
+    //  echo "<pre>";
+    //      exit();
+  }
+
+  $this->load->view('admin/filter_interest_paid', [
+    'data' => $data,
+    'datas' => $datas,
+    'blanch' => $blanch,
+    'from' => $from,
+    'to' => $to,
+    'blanch_data' => $blanch_data,
+    'sum_loan_withdrawal' => $sum_loan_withdrawal ?? $sumloan_withdrawal,
+    'blanch_id' => $blanch_id,
+    
+]);
+
 }
 
 

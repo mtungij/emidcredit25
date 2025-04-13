@@ -181,19 +181,19 @@
                                 <div class="col-md-4">
   <div class="body bg-success text-light">
                                         <h4><i class="icon-wallet"></i> <?= number_format($today_deposit, ) ?></h4>
-                                        <span>Payment Today</span>
+                                        <span>Mauzo ya leo</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="body bg-warning text-light">
+                                    <div class="body bg-info text-light">
                                         <h4><i class="icon-wallet"></i><?= number_format($today_principal) ?></h4>
-                                        <span>Principal Returned</span>
+                                        <span>Kiasi Kikuu Kilichorejeshwa</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="body bg-primary text-light">
                                         <h4><i class="icon-wallet"></i><?= number_format( $today_interest) ?></h4>
-                                        <span>Interest Returned</span>
+                                        <span>Riba Iliyolipwa</span>
                                     </div>
                                 </div>
                                 

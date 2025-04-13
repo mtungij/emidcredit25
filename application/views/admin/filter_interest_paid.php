@@ -10,7 +10,7 @@
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="<?php echo base_url("admin/index"); ?>"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item active">Loan</li>
-                            <li class="breadcrumb-item active">Loan Withdrawal</li>
+                            <li class="breadcrumb-item active">Interest Payment Report</li>
                         </ul>
                     </div>            
                  
@@ -30,7 +30,7 @@
                          <div class="header">
                             
                             <h2>
-    Loan Withdrawal /
+                            Interest Payment Report /
     <?php echo ($blanch_id == 'all') ? 'All BRANCHES' : $blanch_data->blanch_name; ?> /
     From: <?php echo $from; ?> - To: <?php echo $to; ?>
 </h2>
@@ -41,7 +41,7 @@
                                 <a href="" data-toggle="modal" data-target="#addcontact2" class="btn btn-primary"><i class="icon-calendar">Filter</i></a>
                                 <?php if (count($data) > 0) {
                                  ?>
-                                 <a href="<?php echo base_url("admin/print_loan_withdrawalFilter/{$from}/{$to}/{$blanch_id}/{$loan_status}") ?>" class="btn btn-primary" target="_blank"><i class="icon-printer">Print</i></a>
+                                 <a href="<?php echo base_url("admin/print_loan_withdrawalFilter/{$from}/{$to}/{$blanch_id}") ?>" class="btn btn-primary" target="_blank"><i class="icon-printer">Print</i></a>
                              <?php }else{ ?>
                                 <?php } ?>
                             </div>    
@@ -49,20 +49,18 @@
                           <div class="body">
                             <div class="table-responsive">
                                 <table class="table table-hover js-basic-example dataTable table-custom">
-                                    <thead class="thead-primary">
+                                <thead class="thead-primary">
                                         <tr>
-                                        
-                                        <th>Branch Name</th>
+                                        <th>S/no.</th>
                                         <th>Customer Name</th>
-                                        <th>Loan Product</th>
-                                        <th>Loan Withdrawal</th>
-                                        <th>Principal + interest</th>
-                                        <th>Method</th>
-                                        <th>Duration Type</th>
-                                        <th>Number of Repayment</th>
-                                        <th>Restoration</th>
-                                        <th>Withdrawal Date</th>
-                                        <th>End Date</th>
+                                        <th>Branch Name</th>
+                                        <th>Loan Amount</th>
+                                        <th>Total Interest</th>
+                                        <th>Principal + Interest</th>
+                                        <th>Amount Paid</th>
+                                        <th>Principal Paid</th>
+                                        <th>Interest Paid</th>
+                                        
                                         </tr>
                                     </thead>
                                    
@@ -72,87 +70,67 @@
                                     <?php
 $total_loan_aprove = 0;
 $total_loan_int = 0;
+$total_interest = 0;
+$total_principal = 0;
+$total_depost = 0;
 ?>
 
     <?php $no = 1 ?>    
     <?php if ($blanch_id == 'all'): ?>    
-        <?php foreach ($datas as $branch_loans): ?>
-            <?php foreach ($branch_loans as $loan_aproveds): ?>
+        <?php foreach ($datas as $loan_aproveds): ?>
+            
 
                 <?php
 $total_loan_aprove += $loan_aproveds->loan_aprove;
 $total_loan_int += $loan_aproveds->loan_int;
+$total_interest +=$loan_aproveds->interest_paid;
+$total_principal += $loan_aproveds->principal_paid;
+$total_depost += $loan_aproveds->depost;
 ?>
 
                 <tr>
+                    <td><?php echo $no ++ ; ?></td>
                     <td><?php echo $loan_aproveds->blanch_name; ?></td>
                     <td><?php echo $loan_aproveds->f_name . ' ' . $loan_aproveds->m_name . ' ' . $loan_aproveds->l_name; ?></td>
-                    <td><?php echo $loan_aproveds->loan_name; ?></td>
-                    <td><?php echo number_format($loan_aproveds->loan_aprove); ?></td>
+                     <td><?php echo number_format($loan_aproveds->loan_aprove); ?></td>
+                     <td><?php echo number_format($loan_aproveds->total_interest); ?></td>
                     <td><?php echo number_format($loan_aproveds->loan_int); ?></td>
-                    <td><?php echo $loan_aproveds->account_name; ?></td>
-                    <td>
-                        <?php
-                            if ($loan_aproveds->day == 1) {
-                                echo "Daily";
-                            } elseif ($loan_aproveds->day == 7) {
-                                echo "Weekly";
-                            } elseif (in_array($loan_aproveds->day, [28, 29, 30, 31])) {
-                                echo "Monthly";
-                            }
-                        ?>
-                    </td>
-                    <td><?php echo $loan_aproveds->session; ?></td> 
-                    <td><?php echo number_format($loan_aproveds->restration); ?></td> 
-                    <td><?php echo $loan_aproveds->loan_stat_date; ?></td> 
-                    <td><?php echo substr($loan_aproveds->loan_end_date, 0, 10); ?></td> 
+                    <td><?php echo number_format($loan_aproveds->depost); ?></td>
+                    <td><?php echo $loan_aproveds->principal_paid; ?></td>
+                    <td><?php echo $loan_aproveds->interest_paid; ?></td>
+                   
                 </tr>
                 
-            <?php endforeach; ?>
+           
         <?php endforeach; ?>
     <?php else: ?>
         <?php foreach ($data as $loan_aproveds): ?>
             <?php
 $total_loan_aprove += $loan_aproveds->loan_aprove;
 $total_loan_int += $loan_aproveds->loan_int;
+$total_interest +=$loan_aproveds->interest_paid;
+$total_principal += $loan_aproveds->principal_paid;
+$total_depost += $loan_aproveds->depost;
 ?>
 
             <tr>
-                <td><?php echo $loan_aproveds->blanch_name; ?></td>
-                <td><?php echo $loan_aproveds->f_name . ' ' . $loan_aproveds->m_name . ' ' . $loan_aproveds->l_name; ?></td>
-                <td><?php echo $loan_aproveds->loan_name; ?></td>
+                   <td><?php echo $no ++ ; ?></td>
+                    <td><?php echo $loan_aproveds->blanch_name; ?></td>
+                    <td><?php echo $loan_aproveds->f_name . ' ' . $loan_aproveds->m_name . ' ' . $loan_aproveds->l_name; ?></td>
+                     <td><?php echo number_format($loan_aproveds->loan_aprove); ?></td>
+                     <td><?php echo number_format($loan_aproveds->total_interest); ?></td>
+                    <td><?php echo number_format($loan_aproveds->loan_int); ?></td>
+                    <td><?php echo $loan_aproveds->depost; ?></td>
+                    <td><?php echo $loan_aproveds->principal_paid; ?></td>
+                    <td><?php echo $loan_aproveds->interest_paid; ?></td>
                 
-                <td><?php echo number_format($loan_aproveds->loan_aprove); ?></td>
-                <td><?php echo number_format($loan_aproveds->loan_int); ?></td>
-                <td><?php echo $loan_aproveds->account_name; ?></td>
-                <td>
-                    <?php
-                        if ($loan_aproveds->day == 1) {
-                            echo "Daily";
-                        } elseif ($loan_aproveds->day == 7) {
-                            echo "Weekly";
-                        } elseif (in_array($loan_aproveds->day, [28, 29, 30, 31])) {
-                            echo "Monthly";
-                        }
-                    ?>
-                </td>
-                <td><?php echo $loan_aproveds->session; ?></td> 
-                <td><?php echo number_format($loan_aproveds->restration); ?></td> 
-                <td><?php echo $loan_aproveds->loan_stat_date; ?></td> 
-                <td><?php echo substr($loan_aproveds->loan_end_date, 0, 10); ?></td> 
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
 </tbody>
 
 
-                                <td>
-             
-                    </div>
-                </div>
-                </div>
-                                        
-                                        </td>           
+                                      
                                  </tr>
       
 
@@ -165,12 +143,11 @@ $total_loan_int += $loan_aproveds->loan_int;
                                     <td></td>
                                     <td></td>
                                     <td><b><?php echo number_format($total_loan_aprove); ?></b></td>
+                                    <td><b></b></td>
                                     <td><b><?php echo number_format($total_loan_int); ?></b></td>
-                                    <td></td>
-                                    
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><b><?= number_format($total_depost) ?></b></td>
+                                    <td><b><?= number_format($total_principal) ?></b></td>
+                                    <td><b><?= number_format($total_interest) ?></b></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -199,7 +176,7 @@ $total_loan_int += $loan_aproveds->loan_int;
             <div class="modal-header">
                 <h6 class="title" id="defaultModalLabel">Filter Loan Withdrawal</h6>
             </div>
-            <?php echo form_open("admin/filter_loan_withdrawal"); ?>
+            <?php echo form_open("admin/filter_interest_paid"); ?>
             <div class="modal-body">
                 <div class="row clearfix">
                     <div class="col-md-12 col-12">

@@ -5270,6 +5270,39 @@ public function get_today_branch_receivable_loan($comp_id) {
 }
 
 
+public function get_depost_with_interest_principal_customer($comp_id)
+{
+    $today = date('Y-m-d');
+
+    $query = $this->db->select('
+            d.depost,
+			d.depost_day,
+			b.blanch_name,
+            l.loan_id AS loan_id,
+            l.how_loan,
+            l.day,
+            l.loan_aprove,
+            l.loan_int,
+            c.f_name,
+            c.m_name,
+            c.l_name,
+            (l.loan_int - l.how_loan) AS total_interest,
+            ROUND(d.depost * ((l.loan_int - l.how_loan) / l.loan_int), 2) AS interest_paid,
+            ROUND(d.depost * (l.how_loan / l.loan_int), 2) AS principal_paid
+        ')
+        ->from('tbl_depost d')
+        ->join('tbl_loans l', 'd.loan_id = l.loan_id')
+		->join('tbl_blanch b', 'd.blanch_id = b.blanch_id')
+        ->join('tbl_customer c', 'l.customer_id = c.customer_id') // join to get customer names
+        ->where('d.depost_day', $today)
+        ->where('d.comp_id', $comp_id)
+        ->get();
+
+    return $query->result_array();
+}
+
+
+
 public function get_total_depost_individual($empl_id){
 	$today = date("Y-m-d");
 	$data = $this->db->query("SELECT SUM(depost) AS total_depost_individual ,SUM(withdraw) AS total_withdrawal_individual FROM tbl_prev_lecod WHERE empl_id = '$empl_id' AND lecod_day = '$today' AND group_id = '0' GROUP BY empl_id");
@@ -5687,6 +5720,69 @@ public function check_empl_privillage($position_id,$empl_id,$comp_id){
 
     return $results;
 }
+
+public function get_depost_filtered_interest_principal_customer($from, $to, $comp_id)
+{
+    $query = $this->db->select('
+            d.depost,
+            d.depost_day,
+            b.blanch_name,
+            l.loan_id AS loan_id,
+            l.how_loan,
+            l.day,
+            l.loan_aprove,
+            l.loan_int,
+            c.f_name,
+            c.m_name,
+            c.l_name,
+            (l.loan_int - l.how_loan) AS total_interest,
+            ROUND(d.depost * ((l.loan_int - l.how_loan) / l.loan_int), 2) AS interest_paid,
+            ROUND(d.depost * (l.how_loan / l.loan_int), 2) AS principal_paid
+        ')
+        ->from('tbl_depost d')
+        ->join('tbl_loans l', 'd.loan_id = l.loan_id')
+        ->join('tbl_blanch b', 'd.blanch_id = b.blanch_id')
+        ->join('tbl_customer c', 'l.customer_id = c.customer_id')
+        ->where('d.depost_day >=', $from)
+        ->where('d.depost_day <=', $to)
+        ->where('d.comp_id', $comp_id)
+        ->get();
+
+		return $query->result();
+}
+
+
+public function get_branch_depost_with_interest_principal_customer($from, $to, $blanch_id)
+{
+    $query = $this->db->select('
+            d.depost,
+            d.depost_day,
+            b.blanch_name,
+            l.loan_id AS loan_id,
+            l.how_loan,
+            l.day,
+            l.loan_aprove,
+            l.loan_int,
+            c.f_name,
+            c.m_name,
+            c.l_name,
+            (l.loan_int - l.how_loan) AS total_interest,
+            ROUND(d.depost * ((l.loan_int - l.how_loan) / l.loan_int), 2) AS interest_paid,
+            ROUND(d.depost * (l.how_loan / l.loan_int), 2) AS principal_paid
+        ')
+        ->from('tbl_depost d')
+        ->join('tbl_loans l', 'd.loan_id = l.loan_id')
+        ->join('tbl_blanch b', 'd.blanch_id = b.blanch_id')
+        ->join('tbl_customer c', 'l.customer_id = c.customer_id')
+        ->where('d.depost_day >=', $from)
+        ->where('d.depost_day <=', $to)
+        ->where('d.blanch_id', $blanch_id)
+        ->get();
+
+		return $query->result();
+}
+
+
 
 public function get_previous_loan_with_total($from,$to,$blanch_id,$loan_status){
 	$data = $this->db->query("SELECT SUM(l.loan_aprove) AS total_loan_aprove,SUM(l.loan_int) AS total_loan_int FROM tbl_outstand ot LEFT JOIN tbl_loans l ON l.loan_id = ot.loan_id JOIN tbl_blanch b ON b.blanch_id = l.blanch_id JOIN tbl_customer c ON c.customer_id = l.customer_id JOIN tbl_loan_category lc ON lc.category_id = l.category_id JOIN tbl_account_transaction at ON at.trans_id = l.method WHERE ot.loan_stat_date between '$from' and '$to' AND l.blanch_id = '$blanch_id' ");
