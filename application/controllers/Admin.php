@@ -9504,6 +9504,11 @@ public function Default_loan(){
 	$default = $this->queries->get_outstand_loan_company($comp_id);
 	$total_default = $this->queries->get_total_outStand_comp($comp_id);
 	$blanch = $this->queries->get_blanch($comp_id);
+
+  // echo "<pre>";
+  // print_r( $total_default);
+  // echo "<pre>";
+  // exit();
 	
 	$this->load->view('admin/default_loan',['default'=>$default,'total_default'=>$total_default,'blanch'=>$blanch]);
 }

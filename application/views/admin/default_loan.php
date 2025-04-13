@@ -42,6 +42,7 @@
                                         <th>S/no.</th>
                                         <th>Branch</th>
                                         <th>Customer</th>
+                                        <th>Phone Number</th>
                                         <th>Employee</th>
                                         <th>Loan Ac</th>
                                         <th>Loan Product</th>
@@ -65,6 +66,7 @@
                                     <td><?php echo $no++; ?>.</td>
                                     <td class="c"><?php echo $loan_aproveds->blanch_name; ?></td>
                                     <td><?php echo $loan_aproveds->f_name; ?> <?php echo substr($loan_aproveds->m_name, 0,1); ?> <?php echo $loan_aproveds->l_name; ?></td>
+                                    <td><?php echo $loan_aproveds->phone_no; ?></td> 
                                    <td><?php echo $loan_aproveds->empl_name; ?></td> 
                                     <td><?php echo $loan_aproveds->loan_code; ?></td>
                                     <td><?php echo $loan_aproveds->loan_name ?></td>
