@@ -14,6 +14,17 @@ class Queries extends CI_Model {
        	return $data->row();
        }
 
+	   public function get_loan_by_loan_id($loan_id) {
+		$this->db->select('tbl_customer.f_name, tbl_customer.m_name, tbl_customer.l_name, tbl_customer.phone_no, tbl_employee.empl_name, tbl_blanch.blanch_name');
+		$this->db->from('tbl_loans');
+		$this->db->join('tbl_customer', 'tbl_customer.customer_id = tbl_loans.customer_id');
+		$this->db->join('tbl_employee', 'tbl_employee.empl_id = tbl_loans.empl_id');
+		$this->db->join('tbl_blanch', 'tbl_blanch.blanch_id = tbl_loans.blanch_id');
+		$this->db->where('tbl_loans.loan_id', $loan_id);
+		$query = $this->db->get();
+		return $query->row(); // returns a single object
+	}
+
 	public function update_penart($loan_id,$penat_status){
 		return $this->db->where('loan_id',$loan_id)->update('tbl_loans',$penat_status);
 	}
