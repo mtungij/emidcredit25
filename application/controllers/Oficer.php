@@ -5683,7 +5683,7 @@ $days_remain = $this->queries->get_loan_active_customer($customer_id);
 
         $loan_code = $this->queries->get_loanCustomerCode($customer_id);
         $code = $loan_code->code;
-        $phones = $loan_code->phone_no;
+        $phone = $loan_code->phone_no;
         $comp_id = $loan_code->comp_id;
         $compdata = $this->queries->get_companyData($comp_id);
         $comp_name=$compdata->comp_name;
@@ -5691,7 +5691,7 @@ $days_remain = $this->queries->get_loan_active_customer($customer_id);
 
          
        
-        $phone = '0'.substr($phones, 3,10);
+       
         // print_r($massage);
         //      exit();
        
