@@ -1314,18 +1314,10 @@ public function modify_sponser($sp_id,$customer_id){
 
               // Prepare the message
 
-$massage = "Habari! Kuna maombi ya mkopo  katika tawi la $blanch_name. 
-Jina lake ni $first_name $middle_name $last_name, nambari ya simu ni $phone_number. 
-Afisa aliyesajili ni $employee_name. Kiasi cha mkopo kilichoombwa ni TZS " . number_format($how_loan, 0);
 
-$phone_number = [    255629364847, 
-255762178026, 
+
   
-            ];
-  
-            foreach ($phone_number as  $phone) {
-              $this->sendsms($phone, $massage);
-            }
+           
 // Send the message
 
 
