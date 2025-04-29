@@ -1319,7 +1319,8 @@ Jina lake ni $first_name $middle_name $last_name, nambari ya simu ni $phone_numb
 Afisa aliyesajili ni $employee_name. Kiasi cha mkopo kilichoombwa ni TZS " . number_format($how_loan, 0);
 
 $phone_number = [    255629364847, 
- 
+255762178026, 
+  
             ];
   
             foreach ($phone_number as  $phone) {
