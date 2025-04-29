@@ -1300,6 +1300,35 @@ public function modify_sponser($sp_id,$customer_id){
         	  }else{
         	  $loan_id =  $this->queries->insert_loan($data);
                $this->insert_loan_attachment($loan_id);
+
+             $new_customer = $this->queries->get_loan_by_loan_id($loan_id);
+              $first_name = $new_customer->f_name;
+              $middle_name = $new_customer->m_name;
+              $last_name = $new_customer->l_name;
+              $phone_number = $new_customer->phone_no;
+              $employee_name = $new_customer->empl_name;
+              $blanch_name = $new_customer->blanch_name;
+
+              //  print_r( $blanch_name);
+        	    //         exit();
+
+              // Prepare the message
+
+$massage = "Habari! Kuna maombi ya mkopo  katika tawi la $blanch_name. 
+Jina lake ni $first_name $middle_name $last_name, nambari ya simu ni $phone_number. 
+Afisa aliyesajili ni $employee_name. Kiasi cha mkopo kilichoombwa ni TZS " . number_format($how_loan, 0);
+
+$phone_number = [    255629364847, 
+ 
+            ];
+  
+            foreach ($phone_number as  $phone) {
+              $this->sendsms($phone, $massage);
+            }
+// Send the message
+
+
+
                $this->session->set_flashdata('massage','');	
         	  }
         	  return redirect('oficer/collelateral_session/'.$loan_id);
@@ -1307,6 +1336,7 @@ public function modify_sponser($sp_id,$customer_id){
     		 
           $this->collelateral_session();
     	}
+
 
         public function insert_loan_attachment($loan_id){
          $this->db->query("INSERT INTO tbl_attachment (`loan_id`) VALUES ('$loan_id')");   
@@ -5704,20 +5734,31 @@ $days_remain = $this->queries->get_loan_active_customer($customer_id);
 // }
 
 public function sendsms($phone,$massage){
-    //$phone = '0753871034';
-    //$sms = 'mapenzi yanauwa';
-    $api_key = 'PE3CBF71w4MpSnkZ';
-    //$api_key = 'qFzd89PXu1e/DuwbwxOE5uUBn6';
-    //$curl = curl_init();
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL,"https://galadove.loan-pocket.com/api/v1/receive/action/send/sms");
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS,
-            'apiKey='.$api_key.'&phoneNumber='.$phone.'&messageContent='.$massage);
+	//public function sendsms(){f
+	//$phone = '255628323760';
+	//$massage = 'mapenzi yanauwa';
+	$api_key = 'PE3CBF71w4MpSnkZ';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+	//$api_key = 'qFzd89PXu1e/DuwbwxOE5uUBn6';
+	//$curl = curl_init();
+  $url = "https://sms-api.kadolab.com/api/send-sms";
+  $token = "12|oDsG2A8UHc2bAEvzrmJzKfXYdH8mhX6lkSMCrtiSc3e0e708";
 
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer '. $token,
+    'Content-Type: application/json',
+  ]);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    "phoneNumbers" => ["+$phone"],
+    "message" => $massage
+  ]));
+
 $server_output = curl_exec($ch);
 curl_close ($ch);
+
+//print_r($server_output);
 }
 
 
