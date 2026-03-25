@@ -95,33 +95,189 @@
 
 .pwa-install-link:active {
     transform: scale(0.98) !important;
-        #navbar-search {
-            display: none !important;
-        }
+}
 
-        .navbar-right {
-            display: flex;
-            align-items: center;
-        }
-
-        #navbar-menu .nav {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-        }
-
-        .pwa-install-link {
-            min-width: 40px;
-            height: 40px;
-            justify-content: center;
-            padding: 0 10px !important;
-            border-radius: 8px;
-        }
-
-        .pwa-install-label {
-            display: none;
-        }
+/* Extra small devices (phones: < 576px) */
+@media (max-width: 575.98px) {
+    #navbar-search {
+        display: none !important;
     }
+
+    .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #navbar-menu .nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .icon-menu {
+        padding: 8px !important;
+        font-size: 16px !important;
+    }
+
+    .pwa-install-link {
+        padding: 6px 8px !important;
+        min-height: 38px !important;
+        border-radius: 6px !important;
+        font-size: 10px !important;
+        gap: 4px !important;
+    }
+
+    .pwa-install-link i {
+        font-size: 12px !important;
+    }
+
+    .pwa-install-label {
+        display: none;
+    }
+
+    .navbar-brand img {
+        max-height: 30px;
+        max-width: 100px;
+    }
+}
+
+/* Small devices (tablets portrait: 576px - 767.98px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    #navbar-search {
+        display: none !important;
+    }
+
+    .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #navbar-menu .nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .icon-menu {
+        padding: 10px !important;
+        font-size: 18px !important;
+    }
+
+    .pwa-install-link {
+        padding: 6px 10px !important;
+        min-height: 40px !important;
+        border-radius: 8px !important;
+        font-size: 11px !important;
+        gap: 5px !important;
+    }
+
+    .pwa-install-link i {
+        font-size: 13px !important;
+    }
+
+    .pwa-install-label {
+        display: none;
+    }
+
+    .navbar-brand img {
+        max-height: 35px;
+        max-width: 120px;
+    }
+}
+
+/* Medium devices (tablets landscape: 768px - 991.98px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    #navbar-search {
+        width: 200px !important;
+    }
+
+    .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    #navbar-menu .nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .icon-menu {
+        padding: 10px !important;
+        font-size: 18px !important;
+    }
+
+    .pwa-install-link {
+        padding: 6px 12px !important;
+        min-height: 42px !important;
+        border-radius: 10px !important;
+        font-size: 11px !important;
+    }
+
+    .pwa-install-link i {
+        font-size: 13px !important;
+    }
+
+    .pwa-install-label {
+        display: inline !important;
+    }
+
+    .navbar-brand img {
+        max-height: 38px;
+        max-width: 140px;
+    }
+}
+
+/* Large devices (desktops: >= 992px) */
+@media (min-width: 992px) {
+    #navbar-search {
+        width: 300px !important;
+    }
+
+    .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    #navbar-menu .nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .icon-menu {
+        padding: 12px !important;
+        font-size: 18px !important;
+    }
+
+    .pwa-install-link {
+        padding: 6px 12px !important;
+        min-height: 44px !important;
+        border-radius: 20px !important;
+        font-size: 12px !important;
+    }
+
+    .pwa-install-link i {
+        font-size: 14px !important;
+    }
+
+    .pwa-install-label {
+        display: inline !important;
+    }
+
+    .navbar-brand img {
+        max-height: 40px;
+        max-width: 160px;
+    }
+}
 </style>
 </head>
 <body class="theme-cyan">
