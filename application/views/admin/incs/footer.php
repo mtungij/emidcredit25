@@ -40,6 +40,7 @@
 <script src="<?php echo base_url('assets/js/select2.min.js'); ?>"></script>
 <script src="<?php //echo base_url('assets/js/jquery.js'); ?>"></script>
 <script src="<?php echo base_url() ?>assets/js/cropper.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/pwa-install.js"></script>
 <script>
     $('.select2').select2();
 </script>

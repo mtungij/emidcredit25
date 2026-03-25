@@ -9,6 +9,11 @@
 <meta name="author" content="WrapTheme, design by: ThemeMakker.com">
 
 <link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="manifest" href="<?php echo base_url('manifest.json'); ?>">
+<meta name="theme-color" content="#00bcd4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Loan Pocket">
+<link rel="apple-touch-icon" href="<?php echo base_url('assets/img/pwa-icon-192.png'); ?>">
 
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -49,6 +54,53 @@
 
     .c {
         text-transform: uppercase;
+    }
+
+    .pwa-install-link {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+        color: #dc3545 !important;
+    }
+
+    .pwa-install-label {
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .pwa-install-link:hover,
+    .pwa-install-link:focus {
+        color: #c82333 !important;
+    }
+
+    @media (max-width: 767.98px) {
+        #navbar-search {
+            display: none !important;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        #navbar-menu .nav {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .pwa-install-link {
+            min-width: 40px;
+            height: 40px;
+            justify-content: center;
+            padding: 0 10px !important;
+            border-radius: 8px;
+        }
+
+        .pwa-install-label {
+            display: none;
+        }
     }
 </style>
 </head>
