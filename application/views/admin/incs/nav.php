@@ -44,7 +44,7 @@
                             <a href="<?php echo base_url("welcome/logout"); ?>" class="icon-menu"><i class="icon-logout"></i></a>
                         </li>
                             <li>
-                                <a href="javascript:void(0);" id="pwa-install-btn" class="icon-menu pwa-install-link" title="Install Loan Pocket"><i class="icon-cloud-download"></i> <span class="pwa-install-label">Install</span></a>
+                                <a href="javascript:void(0);" id="pwa-install-btn" class="icon-menu pwa-install-link" title="Install Loan Pocket"><i class="icon-cloud-download"></i> <span class="pwa-install-label">Install App</span></a>
                             </li>
                     </ul>
                 </div>

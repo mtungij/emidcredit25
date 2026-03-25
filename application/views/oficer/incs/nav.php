@@ -19,8 +19,7 @@
                 <div id="navbar-menu">
                     <ul class="nav navbar-nav">
                           <li>
-                            <a href="javascript:void(0);" id="pwa-install-btn" class="icon-menu pwa-install-link" title="Install Loan Pocket"><i class="icon-cloud-download"></i> <span class="pwa-install-label">Install</span></a>
-                        </li>
+                                <a href="javascript:void(0);" id="pwa-install-btn" class="icon-menu pwa-install-link" title="Install Loan Pocket"><i class="icon-cloud-download"></i> <span class="pwa-install-label">Install App</span></a>
                        
                         <li>
                             <a href="<?php echo base_url("welcome/empl_logout"); ?>" class="icon-menu"><i class="icon-logout"></i></a>
