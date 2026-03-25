@@ -169,10 +169,9 @@
             border-radius: 10px !important;
         }
 
-        .pwa-install-label,
         .logout-label {
-            display: none;
-        }
+        display: none;
+    }
 
         .navbar-brand img {
             max-height: 30px;

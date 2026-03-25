@@ -197,7 +197,6 @@ button:focus {
         border-radius: 10px !important;
     }
 
-    .pwa-install-label,
     .logout-label {
         display: none;
     }
