@@ -1,10 +1,7 @@
 (function () {
   var installButton = document.getElementById('pwa-install-btn');
   var deferredPrompt = null;
-
-  function isAndroid() {
-    return /android/i.test(navigator.userAgent);
-  }
+  var pendingClick = false;
 
   function isIOS() {
     return /iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -18,10 +15,8 @@
     var msg = '';
     if (isIOS()) {
       msg = 'Tap the <b>Share</b> button in your browser, then choose <b>"Add to Home Screen"</b>.';
-    } else if (isAndroid()) {
-      msg = 'Tap the browser <b>menu (⋮)</b> at the top-right, then choose <b>"Add to Home screen"</b> or <b>"Install app"</b>.';
     } else {
-      msg = 'Use your browser menu and choose <b>"Install app"</b> or <b>"Add to Home screen"</b>.';
+      msg = 'Tap the browser <b>menu (⋮)</b> at the top-right, then choose <b>"Add to Home screen"</b> or <b>"Install app"</b>.';
     }
 
     if (typeof swal === 'function') {
@@ -36,6 +31,17 @@
     } else {
       alert('To install: ' + msg.replace(/<[^>]+>/g, ''));
     }
+  }
+
+  function doPrompt() {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function (choiceResult) {
+      deferredPrompt = null;
+      pendingClick = false;
+      if (choiceResult.outcome === 'accepted') {
+        installButton.style.display = 'none';
+      }
+    });
   }
 
   if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
@@ -56,30 +62,42 @@
   window.addEventListener('beforeinstallprompt', function (event) {
     event.preventDefault();
     deferredPrompt = event;
+    // If user already clicked while we were waiting, fire immediately
+    if (pendingClick) {
+      pendingClick = false;
+      doPrompt();
+    }
   });
 
   installButton.addEventListener('click', function (event) {
     event.preventDefault();
 
     if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function (choiceResult) {
-        deferredPrompt = null;
-        if (choiceResult.outcome === 'accepted') {
-          installButton.style.display = 'none';
-        }
-      });
-    } else if (window.location.protocol === 'https:' && !isIOS()) {
-      // On HTTPS (non-iOS) the browser handles install; prompt not ready yet or
-      // already installed — nothing to do, browser chip will appear automatically
+      doPrompt();
+    } else if (isIOS()) {
+      // iOS Safari never fires beforeinstallprompt
       showFallbackGuide();
+    } else if (window.location.protocol === 'https:') {
+      // Event hasn't fired yet — wait for it (set pending flag)
+      pendingClick = true;
+      installButton.style.opacity = '0.6';
+      // If it doesn't arrive within 4 seconds, show manual guide
+      setTimeout(function () {
+        if (pendingClick) {
+          pendingClick = false;
+          installButton.style.opacity = '';
+          showFallbackGuide();
+        }
+      }, 4000);
     } else {
+      // Plain HTTP dev environment
       showFallbackGuide();
     }
   });
 
   window.addEventListener('appinstalled', function () {
     deferredPrompt = null;
+    pendingClick = false;
     installButton.style.display = 'none';
   });
 })();
