@@ -24,10 +24,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$_isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
-            (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
-$config['base_url'] = ($_isHttps ? 'https' : 'http') . '://' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '192.168.100.112') . '/';
-// $config['base_url'] = 'http://localhost:8084/'; 
+// $config['base_url'] = 'http://localhost:8094/'; 
+$config['base_url'] = 'https://emidcredit.phamasoft.com/'; 
 /*
 |--------------------------------------------------------------------------
 | Index File
