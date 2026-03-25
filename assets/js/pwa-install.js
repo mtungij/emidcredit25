@@ -11,6 +11,18 @@
     return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   }
 
+  function hideButton() {
+    if (installButton) {
+      installButton.style.display = 'none';
+    }
+  }
+
+  function showButton() {
+    if (installButton) {
+      installButton.style.display = 'inline-flex';
+    }
+  }
+
   function showFallbackGuide() {
     var msg = '';
     if (isIOS()) {
@@ -39,14 +51,8 @@
       deferredPrompt = null;
       pendingClick = false;
       if (choiceResult.outcome === 'accepted') {
-        installButton.style.display = 'none';
+        hideButton();
       }
-    });
-  }
-
-  if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/service-worker.js').catch(function () {});
     });
   }
 
@@ -54,14 +60,28 @@
     return;
   }
 
+  // Hide button if app is already in standalone mode
   if (isStandaloneMode()) {
-    installButton.style.display = 'none';
+    hideButton();
     return;
   }
 
+  // Show button by default (for non-standalone)
+  showButton();
+
+  // Register service worker
+  if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/service-worker.js').catch(function () {});
+    });
+  }
+
+  // Listen for beforeinstallprompt event
   window.addEventListener('beforeinstallprompt', function (event) {
     event.preventDefault();
     deferredPrompt = event;
+    showButton(); // Ensure button is visible when prompt is ready
+    
     // If user already clicked while we were waiting, fire immediately
     if (pendingClick) {
       pendingClick = false;
@@ -69,10 +89,13 @@
     }
   });
 
+  // Handle install button click
   installButton.addEventListener('click', function (event) {
     event.preventDefault();
+    event.stopPropagation();
 
     if (deferredPrompt) {
+      // Native install prompt is ready
       doPrompt();
     } else if (isIOS()) {
       // iOS Safari never fires beforeinstallprompt
@@ -81,23 +104,25 @@
       // Event hasn't fired yet — wait for it (set pending flag)
       pendingClick = true;
       installButton.style.opacity = '0.6';
-      // If it doesn't arrive within 4 seconds, show manual guide
+      
+      // If it doesn't arrive within 5 seconds, show manual guide
       setTimeout(function () {
         if (pendingClick) {
           pendingClick = false;
           installButton.style.opacity = '';
           showFallbackGuide();
         }
-      }, 4000);
+      }, 5000);
     } else {
       // Plain HTTP dev environment
       showFallbackGuide();
     }
   });
 
+  // Hide button after app is installed
   window.addEventListener('appinstalled', function () {
     deferredPrompt = null;
     pendingClick = false;
-    installButton.style.display = 'none';
+    hideButton();
   });
 })();

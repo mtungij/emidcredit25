@@ -87,19 +87,42 @@ button:focus {
 .pwa-install-link {
     display: inline-flex !important;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     white-space: nowrap;
-    color: #dc3545 !important;
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    padding: 6px 12px !important;
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3) !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+
+.pwa-install-link i {
+    font-size: 14px !important;
 }
 
 .pwa-install-label {
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
 }
 
 .pwa-install-link:hover,
 .pwa-install-link:focus {
-    color: #c82333 !important;
+    color: #fff !important;
+    background-color: #c82333 !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.5) !important;
+    text-decoration: none !important;
+}
+
+.pwa-install-link:active {
+    transform: scale(0.98) !important;
 }
 
 @media (max-width: 767.98px) {
