@@ -84,84 +84,121 @@ button:focus {
     box-shadow: none;
 }
 
-.pwa-install-link {
+.navbar-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 12px;
+}
+
+#navbar-menu {
+    margin-left: auto;
+}
+
+#navbar-menu .nav-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0;
+}
+
+#navbar-menu .nav-action-item {
+    margin-left: 8px;
+}
+
+#navbar-menu .nav-action-item:first-child {
+    margin-left: 0;
+}
+
+.pwa-install-link,
+.logout-link {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
     gap: 6px;
+    min-height: 42px;
+    padding: 8px 12px !important;
+    border-radius: 14px !important;
     white-space: nowrap;
-    color: #fff !important;
-    background-color: #dc3545 !important;
-    padding: 6px 12px !important;
-    border-radius: 20px !important;
-    font-weight: 600 !important;
     font-size: 12px !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3) !important;
-    cursor: pointer !important;
+    font-weight: 600 !important;
     text-decoration: none !important;
+    transition: all 0.25s ease !important;
 }
 
-.pwa-install-link i {
+.pwa-install-link {
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.28) !important;
+}
+
+.logout-link {
+    color: #fff !important;
+    background-color: #343a40 !important;
+    box-shadow: 0 2px 8px rgba(52, 58, 64, 0.22) !important;
+}
+
+.pwa-install-link i,
+.logout-link i {
     font-size: 14px !important;
 }
 
-.pwa-install-label {
+.pwa-install-label,
+.logout-label {
     font-size: 12px;
     font-weight: 600;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
+}
+
+.pwa-install-link:hover,
+.pwa-install-link:focus,
+.logout-link:hover,
+.logout-link:focus {
+    color: #fff !important;
+    text-decoration: none !important;
+    transform: translateY(-1px);
 }
 
 .pwa-install-link:hover,
 .pwa-install-link:focus {
-    color: #fff !important;
     background-color: #c82333 !important;
-    transform: scale(1.05) !important;
-    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.5) !important;
-    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4) !important;
 }
 
-.pwa-install-link:active {
+.logout-link:hover,
+.logout-link:focus {
+    background-color: #23272b !important;
+    box-shadow: 0 4px 12px rgba(52, 58, 64, 0.3) !important;
+}
+
+.pwa-install-link:active,
+.logout-link:active {
     transform: scale(0.98) !important;
 }
 
-/* Extra small devices (phones: < 576px) */
-@media (max-width: 575.98px) {
+@media (max-width: 767.98px) {
     #navbar-search {
         display: none !important;
     }
 
     .navbar-right {
-        display: flex;
-        align-items: center;
         gap: 8px;
     }
 
-    #navbar-menu .nav {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 4px;
+    #navbar-menu .nav-action-item {
+        margin-left: 6px;
     }
 
-    .icon-menu {
-        padding: 8px !important;
-        font-size: 16px !important;
+    .pwa-install-link,
+    .logout-link {
+        min-height: 38px;
+        padding: 8px 10px !important;
+        border-radius: 10px !important;
     }
 
-    .pwa-install-link {
-        padding: 6px 8px !important;
-        min-height: 38px !important;
-        border-radius: 6px !important;
-        font-size: 10px !important;
-        gap: 4px !important;
-    }
-
-    .pwa-install-link i {
-        font-size: 12px !important;
-    }
-
-    .pwa-install-label {
+    .pwa-install-label,
+    .logout-label {
         display: none;
     }
 
@@ -171,134 +208,29 @@ button:focus {
     }
 }
 
-/* Small devices (tablets portrait: 576px - 767.98px) */
-@media (min-width: 576px) and (max-width: 767.98px) {
-    #navbar-search {
-        display: none !important;
-    }
-
-    .navbar-right {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    #navbar-menu .nav {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .icon-menu {
-        padding: 10px !important;
-        font-size: 18px !important;
-    }
-
-    .pwa-install-link {
-        padding: 6px 10px !important;
-        min-height: 40px !important;
-        border-radius: 8px !important;
-        font-size: 11px !important;
-        gap: 5px !important;
-    }
-
-    .pwa-install-link i {
-        font-size: 13px !important;
-    }
-
-    .pwa-install-label {
-        display: none;
-    }
-
-    .navbar-brand img {
-        max-height: 35px;
-        max-width: 120px;
-    }
-}
-
-/* Medium devices (tablets landscape: 768px - 991.98px) */
 @media (min-width: 768px) and (max-width: 991.98px) {
     #navbar-search {
         width: 200px !important;
     }
 
     .navbar-right {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    #navbar-menu .nav {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .icon-menu {
-        padding: 10px !important;
-        font-size: 18px !important;
-    }
-
-    .pwa-install-link {
-        padding: 6px 12px !important;
-        min-height: 42px !important;
-        border-radius: 10px !important;
-        font-size: 11px !important;
-    }
-
-    .pwa-install-link i {
-        font-size: 13px !important;
-    }
-
-    .pwa-install-label {
-        display: inline !important;
-    }
-
-    .navbar-brand img {
-        max-height: 38px;
-        max-width: 140px;
-    }
-}
-
-/* Large devices (desktops: >= 992px) */
-@media (min-width: 992px) {
-    #navbar-search {
-        width: 300px !important;
-    }
-
-    .navbar-right {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    #navbar-menu .nav {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
         gap: 10px;
     }
 
-    .icon-menu {
-        padding: 12px !important;
-        font-size: 18px !important;
+    .pwa-install-link,
+    .logout-link {
+        padding: 8px 11px !important;
     }
 
-    .pwa-install-link {
-        padding: 6px 12px !important;
-        min-height: 44px !important;
-        border-radius: 20px !important;
-        font-size: 12px !important;
+    .navbar-brand img {
+        max-height: 36px;
+        max-width: 132px;
     }
+}
 
-    .pwa-install-link i {
-        font-size: 14px !important;
-    }
-
-    .pwa-install-label {
-        display: inline !important;
+@media (min-width: 992px) {
+    #navbar-search {
+        width: 300px !important;
     }
 
     .navbar-brand img {
@@ -306,7 +238,6 @@ button:focus {
         max-width: 160px;
     }
 }
-
 </style>
 
 
@@ -316,6 +247,35 @@ button:focus {
                text-transform: uppercase;
                  }
                 
+
+/* Spacer to push items to the right */
+.nav-spacer {
+    flex-grow: 1 !important;
+    margin: 0 !important;
+    min-width: 0;
+}
+
+.nav-spacer a {
+    display: none !important;
+}
+
+@media (max-width: 575.98px) {
+    .nav-spacer {
+        flex-grow: 1 !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .nav-spacer {
+        flex-grow: 1 !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .nav-spacer {
+        display: none !important;
+    }
+}
                 </style>
 
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/select2.min.css">

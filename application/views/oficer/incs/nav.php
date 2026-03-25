@@ -17,14 +17,13 @@
                 </form>                
 
                 <div id="navbar-menu">
-                    <ul class="nav navbar-nav">
-                          <li>
-                                <a href="javascript:void(0);" id="pwa-install-btn" class="icon-menu pwa-install-link" title="Install Loan Pocket"><i class="icon-cloud-download"></i> <span class="pwa-install-label">Install App</span></a>
-                       
-                        <li>
-                            <a href="<?php echo base_url("welcome/empl_logout"); ?>" class="icon-menu"><i class="icon-logout"></i></a>
+                    <ul class="nav navbar-nav nav-actions">
+                        <li class="nav-action-item">
+                            <a href="javascript:void(0);" id="pwa-install-btn" class="icon-menu pwa-install-link" title="Install Loan Pocket"><i class="icon-cloud-download"></i> <span class="pwa-install-label">Install App</span></a>
                         </li>
-                          
+                        <li class="nav-action-item">
+                            <a href="<?php echo base_url("welcome/empl_logout"); ?>" class="icon-menu logout-link" title="Logout"><i class="icon-logout"></i> <span class="logout-label">Logout</span></a>
+                        </li>
                     </ul>
                 </div>
             </div>
