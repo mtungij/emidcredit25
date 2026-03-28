@@ -753,7 +753,6 @@ return true;
         $this->form_validation->set_rules('date_birth','date_birth','required');
         $this->form_validation->set_rules('phone_no','phone number','required');
         $this->form_validation->set_rules('region_id','region','required');
-        $this->form_validation->set_rules('district','district','required');
         $this->form_validation->set_rules('ward','ward','required');
         $this->form_validation->set_rules('street','street','required');
         $this->form_validation->set_rules('age','age','required');
@@ -769,7 +768,8 @@ return true;
              $comp_id = $data['comp_id'];
              $blanch_id = $data['blanch_id'];
              $gender = $data['gender'];
-             $district = $data['district'];
+             $district = trim($data['district']);
+             $district = ($district === '') ? null : $district;
              $region_id = $data['region_id'];
              $date_birth = $data['date_birth'];
              $ward = $data['ward'];
@@ -819,8 +819,9 @@ return true;
 
 
     public function insert_customer_detail($comp_id,$blanch_id,$empl_id,$f_name,$m_name,$l_name,$gender,$date_birth,$age,$phone,$region_id,$district,$ward,$street,$date_reg){
+     $district_sql = is_null($district) ? "NULL" : "'" . $district . "'";
      $this->db->query("INSERT INTO   tbl_customer (`comp_id`,`blanch_id`,`empl_id`,`f_name`,`m_name`,`l_name`,`gender`,`date_birth`,`age`,`phone_no`,`region_id`,`district`,`ward`,`street`,`reg_date`) 
-      VALUES ('$comp_id','$blanch_id','$empl_id','$f_name','$m_name','$l_name','$gender','$date_birth','$age','$phone','$region_id','$district','$ward','$street','$date_reg')");
+      VALUES ('$comp_id','$blanch_id','$empl_id','$f_name','$m_name','$l_name','$gender','$date_birth','$age','$phone','$region_id',$district_sql,'$ward','$street','$date_reg')");
      return $this->db->insert_id();
      }
 
@@ -1097,19 +1098,37 @@ public function modify_sponser($sp_id,$customer_id){
     	$this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
     	if ($this->form_validation->run()) {
     		$data = $this->input->post();
+
+        		if (!empty($data['sp_passport_cropped'])) {
+        			$passportPath = $this->save_sponser_passport_base64($data['sp_passport_cropped']);
+        			if ($passportPath === false) {
+        				return redirect('oficer/edit_viewSponser/'.$customer_id);
+        			}
+        			$data['sp_passport'] = $passportPath;
+        		} elseif (!empty($_FILES['sp_passport']['name'])) {
+        			$passportPath = $this->upload_sponser_passport('sp_passport');
+        			if ($passportPath === false) {
+        				return redirect('oficer/edit_viewSponser/'.$customer_id);
+        			}
+        			$data['sp_passport'] = $passportPath;
+        		}
+
+      		if (isset($data['old_sp_passport'])) {
+      			unset($data['old_sp_passport']);
+      		}
+        		if (isset($data['sp_passport_cropped'])) {
+        			unset($data['sp_passport_cropped']);
+        		}
       //         echo "<pre>";
     		// print_r($data);
     		//       exit();
     		$this->load->model('queries');
     		if ($this->queries->update_sponser($sp_id,$data)) {
     			$this->session->set_flashdata('massage','Sponsers information Updated successfully');
+      		return redirect('oficer/loan_applicationForm/'.$customer_id);
     		}else{
     		$this->session->set_flashdata('error','Failed');	
     		}
-    		$sponser = $this->queries->get_sponser($customer_id);
-    		$customer_id = $sponser->customer_id;
-              // print_r($customer_id);
-              //     exit();
     		return redirect('oficer/edit_viewSponser/'.$customer_id);
     	}
     	$this->edit_viewSponser();
@@ -1140,6 +1159,42 @@ public function modify_sponser($sp_id,$customer_id){
 
 
     public function create_sponser($customer_id){
+        $this->form_validation->set_rules('sp_name','Sponser first name','required');
+        $this->form_validation->set_rules('sp_mname','Sponser midle name','required');
+        $this->form_validation->set_rules('sp_lname','Sponser last name','required');
+        $this->form_validation->set_rules('sp_phone_no','Sponser phone number','required');
+        $this->form_validation->set_rules('sp_relation','Sponser relation','required');
+        $this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
+
+        if (!$this->form_validation->run()) {
+          return redirect("oficer/edit_viewSponser/".$customer_id);
+        }
+
+        $this->load->model('queries');
+
+        $existingSponser = $this->queries->get_sponser($customer_id);
+        if ($existingSponser) {
+          $this->session->set_flashdata('error','Only one guarantor is allowed for this customer');
+          return redirect("oficer/edit_viewSponser/".$customer_id);
+        }
+
+        $croppedPassport = $this->input->post('sp_passport_cropped');
+
+        if (empty($croppedPassport) && empty($_FILES['sp_passport']['name'])) {
+          $this->session->set_flashdata('error','Guarantor passport is required');
+          return redirect("oficer/edit_viewSponser/".$customer_id);
+        }
+
+        if (!empty($croppedPassport)) {
+          $passportPath = $this->save_sponser_passport_base64($croppedPassport);
+        } else {
+          $passportPath = $this->upload_sponser_passport('sp_passport');
+        }
+
+        if ($passportPath === false) {
+          return redirect("oficer/edit_viewSponser/".$customer_id);
+        }
+
             //Prepare array of user data
             $data = array(
             'sp_name'=> $this->input->post('sp_name'),
@@ -1149,23 +1204,104 @@ public function modify_sponser($sp_id,$customer_id){
             'sp_lname'=> $this->input->post('sp_lname'),
             'sp_phone_no'=> $this->input->post('sp_phone_no'),
             'sp_relation'=> $this->input->post('sp_relation'),
+        'sp_passport'=> $passportPath,
             'created_at'    => date('Y-m-d H:i:s'),
             );
             //   echo "<pre>";
             // print_r($data);
             //  echo "</pre>";
             //   exit();
-
-           $this->load->model('queries'); 
            $data = $this->queries->insert_sponser_info($data);
             //Storing insertion status message.
             if($data){
             	$this->session->set_flashdata('massage','Gualantors information Saved successfully');
+      	            return redirect("oficer/loan_applicationForm/".$customer_id);
                }else{
                 $this->session->set_flashdata('error','Data failed!!');
             }
         return redirect("oficer/edit_viewSponser/".$customer_id);        
     }
+
+      public function delete_from_sponser($customer_id){
+        $this->load->model('queries');
+        $sponsers = $this->queries->get_sponserCustomer($customer_id);
+
+        if (!empty($sponsers)) {
+          foreach ($sponsers as $sponser) {
+            if (!empty($sponser->sp_passport)) {
+              $filePath = FCPATH . $sponser->sp_passport;
+              if (file_exists($filePath)) {
+                @unlink($filePath);
+              }
+            }
+          }
+        }
+
+        $this->db->delete('tbl_sponser', ['customer_id' => $customer_id]);
+        $this->session->set_flashdata('massage', 'Guarantor removed. Please add new guarantor details.');
+        return redirect('oficer/edit_viewSponser/' . $customer_id);
+      }
+
+  private function upload_sponser_passport($fieldName)
+  {
+    $targetDir = FCPATH . 'assets/upload/sponser/';
+    if (!is_dir($targetDir)) {
+      mkdir($targetDir, 0755, true);
+    }
+
+    $config['upload_path'] = $targetDir;
+    $config['allowed_types'] = 'jpg|jpeg|png|webp';
+    $config['max_size'] = 4096;
+    $config['encrypt_name'] = true;
+
+    $this->load->library('upload');
+    $this->upload->initialize($config);
+
+    if (!$this->upload->do_upload($fieldName)) {
+      $this->session->set_flashdata('error', $this->upload->display_errors('', ''));
+      return false;
+    }
+
+    $uploadData = $this->upload->data();
+    return 'assets/upload/sponser/' . $uploadData['file_name'];
+  }
+
+  private function save_sponser_passport_base64($base64Image)
+  {
+    if (empty($base64Image)) {
+      $this->session->set_flashdata('error', 'Invalid cropped passport image');
+      return false;
+    }
+
+    if (!preg_match('/^data:image\/(png|jpeg|jpg|webp);base64,/', $base64Image, $matches)) {
+      $this->session->set_flashdata('error', 'Unsupported cropped passport image format');
+      return false;
+    }
+
+    $extension = $matches[1] === 'jpeg' ? 'jpg' : $matches[1];
+    $imageData = substr($base64Image, strpos($base64Image, ',') + 1);
+    $binaryData = base64_decode($imageData);
+
+    if ($binaryData === false) {
+      $this->session->set_flashdata('error', 'Failed to process cropped passport image');
+      return false;
+    }
+
+    $targetDir = FCPATH . 'assets/upload/sponser/';
+    if (!is_dir($targetDir)) {
+      mkdir($targetDir, 0755, true);
+    }
+
+    $fileName = uniqid('sp_passport_', true) . '.' . $extension;
+    $fullPath = $targetDir . $fileName;
+
+    if (file_put_contents($fullPath, $binaryData) === false) {
+      $this->session->set_flashdata('error', 'Failed to save cropped passport image');
+      return false;
+    }
+
+    return 'assets/upload/sponser/' . $fileName;
+  }
 
 
     public function verfication_code($customer_id)
@@ -1751,6 +1887,7 @@ public function modify_sponser($sp_id,$customer_id){
    
     //$admin_data = $this->queries->get_admin_role($comp_id);
     $loan_fee = $this->queries->get_loanfee($comp_id);
+    $fee_category = $this->queries->get_loanfee_categoryData($comp_id);
     $loan_data = $this->queries->get_loanDisbarsed($loan_id);
     $loan_data_interst = $this->queries->get_loanInterest($loan_id);
     $loan_fee_sum = $this->queries->get_sumLoanFee($comp_id);
@@ -1768,6 +1905,7 @@ public function modify_sponser($sp_id,$customer_id){
       $phone = $loan_data->phone_no;
       $day = $loan_data->day;
       $session = $loan_data->session;
+      $category_fee = @$fee_category->fee_category;
 
       //admin data
       $role = $empl_data->username;
@@ -1816,14 +1954,14 @@ public function modify_sponser($sp_id,$customer_id){
       // $phone = $phones;
 
       $loan_fee_type = $this->queries->get_loanfee_type($comp_id);
-      $type = $loan_fee_type->type;
-      $this->insert_loan_aprovedDisburse($comp_id,$loan_id,$customer_id,$blanch_id,$balance,$role,$group_id);
+      $loan_category = $this->queries->get_loanproduct_fee($loan_id);
+      $type = @$loan_fee_type->type;
+      $pay_id = $this->insert_loan_aprovedDisburse($comp_id,$loan_id,$customer_id,$blanch_id,$balance,$role,$group_id);
       $unchangable_balance = $balance;
-        if ($type == 'PERCENTAGE VALUE') {
+        if ($category_fee == 'GENERAL') {
+      if ($type == 'PERCENTAGE VALUE') {
       for ($i=0; $i<count($loan_fee); $i++) { 
         $interest = $loan_fee[$i]->fee_interest;
-        $fee_description = $loan_fee[$i]->description;
-        $fee_number = $loan_fee[$i]->fee_interest;
         $withdraw_balance = $unchangable_balance * ($interest / 100);
 
         $new_balance = $balance - $withdraw_balance;
@@ -1834,16 +1972,33 @@ public function modify_sponser($sp_id,$customer_id){
    }elseif ($type == 'MONEY VALUE') {
      for ($i=0; $i<count($loan_fee); $i++) { 
         $interest = $loan_fee[$i]->fee_interest;
-        $fee_description = $loan_fee[$i]->description;
-        $fee_number = $loan_fee[$i]->fee_interest;
         $withdraw_balance = $interest;
 
         $new_balance = $balance - $withdraw_balance;
         $pay_id = $this->insert_loanfee_money($loan_fee[$i]->fee_id,$loan_fee[$i]->fee_interest,$loan_fee[$i]->description,$loan_fee[$i]->fee_interest,$loan_id,$blanch_id,$comp_id,$customer_id,$new_balance, $withdraw_balance,$group_id);
-
      //Update Balance in this Loop
         $balance = $new_balance;   
     }
+   }
+   }elseif ($category_fee == 'LOAN PRODUCT') {
+      $fee_description = 'Loan Processing Fee';
+      $loan_fee_id = '0';
+      $fee_category_type = @$loan_category->fee_category_type;
+      $fee_value = (float) @$loan_category->fee_value;
+
+      if ($fee_category_type == 'PERCENTAGE' && $fee_value > 0) {
+        $symbol = '%';
+        $withdraw_balance = $unchangable_balance * ($fee_value / 100);
+        $new_balance = $balance - $withdraw_balance;
+        $pay_id = $this->insert_loanfee_money_feetype($loan_fee_id,$fee_description,$fee_value,$loan_id,$blanch_id,$comp_id,$customer_id,$new_balance,$group_id,$symbol,$withdraw_balance);
+        $balance = $new_balance;
+      } elseif ($fee_category_type == 'MONEY' && $fee_value > 0) {
+        $symbol = 'Tsh';
+        $withdraw_balance = $fee_value;
+        $new_balance = $balance - $withdraw_balance;
+        $pay_id = $this->insert_loanfee_money_feetype($loan_fee_id,$fee_description,$fee_value,$loan_id,$blanch_id,$comp_id,$customer_id,$new_balance,$group_id,$symbol,$withdraw_balance);
+        $balance = $new_balance;
+      }
    }
 
            $this->insert_loan_lecord($comp_id,$customer_id,$loan_id,$blanch_id,$total_loan,$loan_interest,$group_id);
@@ -1859,6 +2014,7 @@ public function modify_sponser($sp_id,$customer_id){
         public function insert_loan_aprovedDisburse($comp_id,$loan_id,$customer_id,$blanch_id,$balance,$role,$group_id){
         $day = date("Y-m-d");
       $this->db->query("INSERT INTO tbl_pay (`comp_id`,`loan_id`,`customer_id`,`blanch_id`,`balance`,`depost`,`emply`,`description`,`group_id`,`date_data`) VALUES ('$comp_id','$loan_id', '$customer_id','$blanch_id','$balance','$balance','$role','CASH DEPOST','$group_id','$day')");
+      return $this->db->insert_id();
       }
 
 
@@ -1871,6 +2027,12 @@ public function modify_sponser($sp_id,$customer_id){
       public function insert_loanfee_money($loan_fee,$interest,$fee_description,$fee_number,$loan_id,$blanch_id,$comp_id,$customer_id,$new_balance, $withdraw_balance,$group_id){
     $date = date("Y-m-d");
     $this->db->query("INSERT INTO tbl_pay (`fee_id`,`fee_desc`,`fee_percentage`,`loan_id`,`blanch_id`,`comp_id`,`customer_id`,`balance`,`withdrow`,`p_today`,`emply`,`symbol`,`group_id`,`date_data`) VALUES ('$loan_fee','$fee_description','$fee_number','$loan_id','$blanch_id','$comp_id','$customer_id','$new_balance','$withdraw_balance','$date','SYSTEM WITHDRAWAL','Tsh','$group_id','$date')");
+   return $this->db->insert_id();
+      }
+
+      public function insert_loanfee_money_feetype($loan_fee,$fee_description,$fee_value,$loan_id,$blanch_id,$comp_id,$customer_id,$cash_aprove,$group_id,$symbol,$with_fee){
+    $date = date("Y-m-d");
+    $this->db->query("INSERT INTO tbl_pay (`fee_id`,`fee_desc`,`fee_percentage`,`loan_id`,`blanch_id`,`comp_id`,`customer_id`,`balance`,`withdrow`,`p_today`,`emply`,`symbol`,`group_id`,`date_data`) VALUES ('$loan_fee','$fee_description','$fee_value','$loan_id','$blanch_id','$comp_id','$customer_id','$cash_aprove','$with_fee','$date','SYSTEM WITHDRAWAL','$symbol','$group_id','$date')");
    return $this->db->insert_id();
       }
 
@@ -2245,36 +2407,36 @@ public function create_withdrow_balance($customer_id){
         // print_r($loan_aprove);
         //          exit();
          //company loan fee setting
+         $sum_total_loanFee = 0; // Initialize to prevent undefined variable errors
          $comp_fee = $this->queries->get_loanfee_categoryData($comp_id);
          $aina_makato = $comp_fee->fee_category;
           //loanfee setting
          $fee_type = $this->queries->get_loanfee_type($comp_id);
-         $type = $fee_type->type;
+         $type = @$fee_type->type;
 
           
          if ($aina_makato == 'LOAN PRODUCT') {
          $category_loan = $this->queries->get_loanproduct_fee($loan_id);
-         $fee_category_type = $category_loan->fee_category_type;
-         $fee_value = $category_loan->fee_value;
+         $fee_category_type = @$category_loan->fee_category_type;
+         $fee_value = @$category_loan->fee_value;
             if ($fee_category_type == 'MONEY') {
             $sum_fee = $this->queries->get_sumfeepercentage($loan_id);
-            $fee = $sum_fee->total_fee;
+            $fee = @$sum_fee->total_fee;
             $sum_total_loanFee = $fee;
             }elseif ($fee_category_type == 'PERCENTAGE') {
-                echo "makato ya percent";
             $sum_fee = $this->queries->get_sumfeepercentage($loan_id);
-            $fee = $sum_fee->total_fee;
+            $fee = @$sum_fee->total_fee;
             $sum_total_loanFee = $loan_aprove * $fee / 100; 
             }
                
           }elseif ($aina_makato == 'GENERAL') {
           if ($type == 'PERCENTAGE VALUE') {
           $sum_fee = $this->queries->get_sumfeepercentage($loan_id);
-          $fee = $sum_fee->total_fee;
+          $fee = @$sum_fee->total_fee;
           $sum_total_loanFee = $loan_aprove * $fee / 100;
           }elseif ($type == 'MONEY VALUE') {
           $sum_fee = $this->queries->get_sumfeepercentage($loan_id);
-          $fee = $sum_fee->total_fee;
+          $fee = @$sum_fee->total_fee;
           $sum_total_loanFee = $fee;
          }
 

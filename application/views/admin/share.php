@@ -27,42 +27,42 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Register Share Holder</h2>
+                            <h2>Sajili Wenye Hisa</h2>
                         </div>
                         <div class="body">
                             <?php echo form_open("admin/create_shareHolder") ?>
                             <div class="row">
                               <div class="col-md-4">
-                                    <span>* Full name:</span>
-                                    <input type="text" name="share_name" placeholder="Full name" autocomplete="off" class="form-control" required>
+                                    <span>* Jina Kamili:</span>
+                                    <input type="text" name="share_name" placeholder="Jina Kamili" autocomplete="off" class="form-control" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <span>* Phone no:</span>
-                                    <input type="number" name="share_mobile" placeholder="Phone no" autocomplete="off" class="form-control" required>
+                                    <span>* Nambari ya Simu:</span>
+                                    <input type="number" name="share_mobile" placeholder="Nambari ya Simu" autocomplete="off" class="form-control" required>
                                 </div>
                                 <input type="hidden" name="comp_id" value="<?php echo $_SESSION['comp_id']; ?>">
                                 <div class="col-lg-4">
-                                    <span>* Email:</span>
-                                    <input type="email" name="share_email" placeholder="Email" autocomplete="off" class="form-control" required>
+                                    <span>* Barua Pepe:</span>
+                                    <input type="email" name="share_email" placeholder="Barua Pepe" autocomplete="off" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <span>*Gender:</span>
+                                    <span>*Jinsia:</span>
                             <select type="text" name="share_sex" class="form-control input-sm" data-required="true">
-                                <option value="">Select gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="">Chagua Jinsia</option>
+                                <option value="male">Mwanaume</option>
+                                <option value="female">Mwanamke</option>
                             </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <span>*Date of Birth:</span>
-                                    <input type="date" name="share_dob" placeholder="Date of Birth" autocomplete="off" class="form-control" required>
+                                    <span>*Tarehe ya Kuzaliwa:</span>
+                                    <input type="date" name="share_dob" placeholder="Tarehe ya Kuzaliwa" autocomplete="off" class="form-control" required>
                                 </div>
                                 </div>
                                 
                                
                                 <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="icon-drawer">Save</i></button>
+                                <button type="submit" class="btn btn-primary"><i class="icon-drawer">Hifadhi</i></button>
                                 </div>
                             
                             <?php echo form_close();  ?>
@@ -74,7 +74,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                          <div class="header">
-                            <h2>Share Holder List </h2>    
+                            <h2>Orodha ya Wamiliki wa Hisa</h2>    
                              </div>
                           <div class="body">
                             <div class="table-responsive">
@@ -83,12 +83,12 @@
                                         <tr>
                                             <tr>
                                                 <th>S/No.</th>
-                                                <th>Shareholder name</th>
-                                                <th>Phone number</th>
-                                                <th>Email</th>
-                                                <th>Sex</th>
-                                                <th>Date of Birth</th>
-                                                <th>Action</th>
+                                                <th>Jina la Mshiriki</th>
+                                                <th>Nambari ya Simu</th>
+                                                <th>Barua Pepe</th>
+                                                <th>Jinsia</th>
+                                                <th>Tarehe ya Kuzaliwa</th>
+                                                <th>Kitendo</th>
                                         </tr>
                                     </thead>
                                    
@@ -114,36 +114,36 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="title" id="defaultModalLabel">Edit Share Holder</h6>
+                <h6 class="title" id="defaultModalLabel">Hariri Mshiriki wa Hisa</h6>
             </div>
             <?php echo form_open("admin/modify_shareholder/{$shares->share_id}"); ?>
             <div class="modal-body">
                 <div class="row clearfix">
                     <div class="col-md-4">
-                                    <span>* Full name:</span>
-                                    <input type="text" name="share_name" placeholder="Full name" autocomplete="off" value="<?php echo $shares->share_name ?>" class="form-control" required>
+                                    <span>* Jina Kamili:</span>
+                                    <input type="text" name="share_name" placeholder="Jina Kamili" autocomplete="off" value="<?php echo $shares->share_name ?>" class="form-control" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <span>* Mobile no:</span>
-                                    <input type="number" name="share_mobile" placeholder="Mobile no" value="<?php echo $shares->share_mobile ?>" autocomplete="off" class="form-control" required>
+                                    <span>* Nambari ya Simu:</span>
+                                    <input type="number" name="share_mobile" placeholder="Nambari ya Simu" value="<?php echo $shares->share_mobile ?>" autocomplete="off" class="form-control" required>
                                 </div>
                                 
                                 <div class="col-md-4">
-                                    <span>* Email:</span>
-                                    <input type="email" name="share_email" placeholder="Email" autocomplete="off" value="<?php echo $shares->share_email ?>" class="form-control" required>
+                                    <span>* Barua Pepe:</span>
+                                    <input type="email" name="share_email" placeholder="Barua Pepe" autocomplete="off" value="<?php echo $shares->share_email ?>" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <span>*Gender:</span>
+                                    <span>* Jinsia:</span>
                             <select type="text" name="share_sex" class="form-control input-sm" data-required="true">
                                 <option value="<?php echo $shares->share_sex; ?>"><?php echo $shares->share_sex; ?></option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="male">Mwanaume</option>
+                                <option value="female">Mwanamke</option>
                             </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <span>*Date of Birth:</span>
-                                    <input type="date" name="share_dob" placeholder="Date of Birth" autocomplete="off" value="<?php echo $shares->share_dob ?>" class="form-control" required>
+                                    <span>* Tarehe ya Kuzaliwa:</span>
+                                    <input type="date" name="share_dob" placeholder="Tarehe ya Kuzaliwa" autocomplete="off" value="<?php echo $shares->share_dob ?>" class="form-control" required>
                                 </div>
                        </div>
                   </div>

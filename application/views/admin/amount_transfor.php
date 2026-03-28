@@ -10,7 +10,7 @@
                     <div class="col-lg-6 col-md-8 col-sm-12">
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="<?php echo base_url("admin/index"); ?>"><i class="icon-home"></i></a></li>                            
-                            <li class="breadcrumb-item active">Transifor Float From Company Account  To Blanch Account</li>
+                            <li class="breadcrumb-item active">Hamisha Kiasi Kutoka Akaunti ya Kampuni Hadi Akaunti ya Tawi</li>
                         </ul>
                     </div>            
                  
@@ -36,29 +36,29 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Transifor Float Form</h2>
+                            <h2>Fomu ya Kuhamisha Kiasi</h2>
                         </div>
                         <div class="body">
                             <?php echo form_open("admin/create_float") ?>
                             <div class="row">
                            <div class="col-md-2">
-                                    <span>*From Company Account :</span>
+                                    <span>*Kutoka Akaunti ya Kampuni :</span>
                                     <select type="number" name="from_trans_id" class="form-control">
-                                        <option value="">Select Account</option>
+                                        <option value="">Chagua Akaunti</option>
                                         <?php foreach ($account as $accounts): ?>
                                         <option value="<?php echo $accounts->trans_id; ?>"><?php echo $accounts->account_name; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
-                                    <span>*Amount:</span>
-                                    <input type="number" required class="form-control" placeholder="Amount" name="blanch_amount" >
+                                    <span>*Kiasi:</span>
+                                    <input type="number" required class="form-control" placeholder="Kiasi" name="blanch_amount" >
                                 </div>
                                 
                                 <div class="col-md-3">
-                                    <span>*To Branch Name:</span>
+                                    <span>*Jina la Tawi:</span>
                                     <select type="number" name="blanch_id" class="form-control select2" required>
-                                        <option value="">---Select Branch---</option>
+                                        <option value="">---Chagua Tawi---</option>
                                         <?php foreach ($blanch as $blanchs): ?>
                                         <option value="<?php echo $blanchs->blanch_id; ?>"><?php echo $blanchs->blanch_name; ?></option>
                                         <?php endforeach; ?>
@@ -66,9 +66,9 @@
                                 </div>
 
                                 <div class="col-md-2">
-                                    <span>*To Branch Account :</span>
+                                    <span>*Akaunti ya Tawi :</span>
                                     <select type="number" name="to_trans_id" class="form-control" required>
-                                        <option value="">Select Account</option>
+                                        <option value="">Chagua Akaunti</option>
                                         <?php foreach ($account as $accounts): ?>
                                         <option value="<?php echo $accounts->trans_id; ?>"><?php echo $accounts->account_name; ?></option>
                                         <?php endforeach; ?>
@@ -76,8 +76,8 @@
                                 </div>
 
                                 <div class="col-md-2">
-                                    <span>*Withdrawal Chargers:</span>
-                                    <input type="number" required  class="form-control" placeholder="Amount" name="charger" required >
+                                    <span>*Ada za Utoaji:</span>
+                                    <input type="number" required  class="form-control" placeholder="Kiasi" value="0" name="charger" required >
                                 </div>
                                 
                                 <input type="hidden" name="comp_id" value="<?php echo $_SESSION['comp_id']; ?>">
@@ -87,7 +87,7 @@
                                 </div>
                                  <br>
                                 <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="icon-pencil">Transfor</i></button>
+                                <button type="submit" class="btn btn-primary"><i class="icon-pencil">Hamisha</i></button>
                                 </div>
                             
                             <?php echo form_close();  ?>
@@ -99,7 +99,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                          <div class="header">
-                            <h2>Today Transaction</h2> 
+                            <h2>Transifor Kiasi Leo</h2> 
                             <div class="pull-right">
                     <a href="" class="btn btn-primary btn-sm"data-toggle="modal" data-target="#addcontact1<?php //echo $loan_categorys->category_id; ?>"><i class="icon-calendar">Previous</i></a>
                             </div>   
@@ -109,12 +109,12 @@
                                 <table class="table table-hover js-basic-example dataTable table-custom">
                                     <thead class="thead-primary">
                                         <tr>
-                                        <th>From Company Account</th>
-                                        <th>Amount</th>
-                                        <th>To Branch</th>
-                                        <th>To Branch Account</th>
-                                        <th>Withdrawal Chargers</th>
-                                        <th>Date</th>
+                                        <th>Kutoka Akaunti ya Kampuni</th>
+                                        <th>Kiasi</th>
+                                        <th>Kwa Tawi</th>
+                                        <th>Akaunti ya Tawi</th>
+                                        <th>Ada za Utoaji</th>
+                                        <th>Tarehe</th>
                                         </tr>
                                     </thead>
                                    

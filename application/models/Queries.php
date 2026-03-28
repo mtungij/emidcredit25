@@ -657,7 +657,7 @@ public function get_allcutomer($comp_id){
 
 
      public function get_loan_active_customer($customer_id){
-     	$data = $this->db->query("SELECT l.loan_id,l.loan_int,l.restration,l.customer_id,ot.loan_stat_date,ot.loan_end_date,l.loan_status,l.loan_code FROM tbl_loans l LEFT JOIN tbl_outstand ot ON ot.loan_id = l.loan_id  WHERE l.customer_id = '$customer_id' ORDER BY l.loan_id DESC LIMIT 1");
+	    	$data = $this->db->query("SELECT l.loan_id,l.loan_int,l.restration,l.customer_id,l.day,l.session,ot.loan_stat_date,ot.loan_end_date,l.loan_status,l.loan_code FROM tbl_loans l LEFT JOIN tbl_outstand ot ON ot.loan_id = l.loan_id  WHERE l.customer_id = '$customer_id' ORDER BY l.loan_id DESC LIMIT 1");
      	return $data->row();
      }
 
@@ -7970,6 +7970,17 @@ public function get_latest_sponsor_data($customer_id) {
 
 	
 	return $query->result_array(); 
+}
+
+public function get_sponsors_by_loan_id($loan_id)
+{
+	$query = $this->db->query("SELECT s.*
+		FROM tbl_sponser s
+		JOIN tbl_loans l ON l.customer_id = s.customer_id
+		WHERE l.loan_id = '$loan_id'
+		ORDER BY s.sp_id DESC");
+
+	return $query->result_array();
 }
 
 public function get_loan_withdrawal_current_month($comp_id) {

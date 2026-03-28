@@ -74,7 +74,6 @@
                                             <th>Phone Number</th>
                                             <th>Employee</th>
                                             <th>Branch</th>
-                                            <th>District</th>
                                             <th>Ward</th>
                                             <th>Street</th>
                                         </tr>
@@ -88,7 +87,6 @@
                                             <td><?php echo $customer->phone_no; ?></td>
                                             <td><?php echo $customer->empl_name; ?></td>
                                             <td><?php echo $customer->blanch_name; ?></td>
-                                            <td><?php echo $customer->district; ?></td>
                                             <td><?php echo $customer->ward; ?></td>
                                             <td><?php echo $customer->street; ?></td>
                                         </tr>

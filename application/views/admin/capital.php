@@ -9,7 +9,7 @@
                     <div class="col-lg-6 col-md-8 col-sm-12">
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="<?php echo base_url("admin/index"); ?>"><i class="icon-home"></i></a></li>                            
-                            <li class="breadcrumb-item active">Capital</li>
+                            <li class="breadcrumb-item active">Mtaji</li>
                         </ul>
                     </div>            
                  
@@ -27,15 +27,15 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Add Capital</h2>
+                            <h2>Ongeza Mtaji</h2>
                         </div>
                         <div class="body">
                             <?php echo form_open("admin/create_capital") ?>
                             <div class="row">
                             <div class="col-lg-4">
-                            <span>* Share Holder Name:</span>
+                            <span>* Jina la Mshiriki wa Hisa:</span>
                                 <select type="text" name="share_id" class="form-control input-sm" required>
-                                <option value="">Select Share Holder</option>
+                                <option value="">Chagua Mshiriki wa Hisa</option>
                                 <?php foreach ($share as $shares): ?>
                                 <option value="<?php echo $shares->share_id; ?>"><?php echo $shares->share_name; ?></option>
                                 <?php endforeach; ?>
@@ -43,15 +43,15 @@
                                 </div>
 
                                 <div class="col-lg-4">
-                                    <span>*Amount:</span>
-                                    <input type="number" name="amount" placeholder="Amount" autocomplete="off" class="form-control input-sm" required>
+                                    <span>*Kiasi:</span>
+                                    <input type="number" name="amount" placeholder="Kiasi" autocomplete="off" class="form-control input-sm" required>
                                 </div>
                                 
                                 <input type="hidden" name="comp_id" value="<?php echo $_SESSION['comp_id']; ?>">
                                 <div class="col-lg-4">
-                                    <span>*Pay Method:</span>
+                                    <span>*Njia ya Malipo:</span>
                             <select type="text" name="pay_method" class="form-control input-sm" required>
-                                <option value="">Select</option>
+                                <option value="">Chagua Njia ya Malipo</option>
                                 <?php foreach ($account as $accounts): ?>
                                 <option value="<?php echo $accounts->trans_id; ?>"><?php echo $accounts->account_name; ?></option>
                                 <?php endforeach; ?>
@@ -59,18 +59,18 @@
                                 </div>
 
                                 <div class="col-lg-6">
-                                    <span>*Receipt no:</span>
-                            <input type="number" name="recept" placeholder="Receipt" autocomplete="off" class="form-control input-sm" >
+                                    <span>*Nambari ya Risiti:</span>
+                            <input type="number" name="recept" placeholder="Nambari ya Risiti" autocomplete="off" class="form-control input-sm" >
                                 </div>
                                 <div class="col-lg-6">
-                                    <span>*Cheque Number:</span>
-                                <input type="number" name="chaque_no" placeholder="Cheque number" autocomplete="off" class="form-control input-sm" >
+                                    <span>*Nambari ya Cheki:</span>
+                                <input type="number" name="chaque_no" placeholder="Nambari ya Cheki" autocomplete="off" class="form-control input-sm" >
                                 </div>
                                
                                 </div>
                                  <br>
                                 <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="icon-drawer">Save</i></button>
+                                <button type="submit" class="btn btn-primary"><i class="icon-drawer">Hifadhi</i></button>
                                 </div>
                             
                             <?php echo form_close();  ?>
@@ -82,7 +82,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                          <div class="header">
-                            <h2>Capital </h2>    
+                            <h2>Mtaji </h2>    
                              </div>
                           <div class="body">
                             <div class="table-responsive">
@@ -90,13 +90,13 @@
                                     <thead class="thead-primary">
                                         <tr>
                                         <th>S/No</th>
-                                        <th>Share Holder</th>
-                                        <th>Amount</th>
-                                        <th>Pay method</th>
-                                        <th>Receipt no</th>
-                                        <th>Chaque no</th>
-                                        <th>Date</th>
-                                        <th>Action</th>
+                                        <th>Mshiriki wa Hisa</th>
+                                        <th>Kiasi</th>
+                                        <th>Njia ya Malipo</th>
+                                        <th>Nambari ya Risiti</th>
+                                        <th>Nambari ya Cheki</th>
+                                        <th>Tarehe</th>
+                                        <th>Kitendo</th>
                                         </tr>
                                     </thead>
                                    

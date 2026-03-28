@@ -39,244 +39,389 @@
 
 
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex flex-column align-items-center text-center">
-                                    <?php if ($customer->passport == TRUE) {
-                                        ?>
+        <?php
+        @$customer_loan = $this->queries->get_loan_active_customer($customer->customer_id);
+        @$total_deposit = $this->queries->get_total_amount_paid_loan($customer_loan->loan_id);
+        @$out_stand     = $this->queries->get_outstand_loan_customer($customer_loan->loan_id);
+        @$total_recovery      = $this->queries->get_total_loan_pend($customer_loan->loan_id);
+        @$total_penart        = $this->queries->get_total_penart_loan($customer_loan->loan_id);
+        @$total_deposit_penart= $this->queries->get_total_paypenart($customer_loan->loan_id);
+        @$end_deposit         = $this->queries->get_end_deposit_time($customer_loan->loan_id);
+        $button_class = '';
+        if ($loan_status->loan_status == 'New Customer') {
+            $button_class = 'btn-primary';
+        } elseif ($loan_status->loan_status == 'Old Customer') {
+            $button_class = 'btn-warning';
+        } else {
+            $button_class = 'btn-secondary';
+        }
+        ?>
 
-                                        <img src="<?php echo base_url() . $customer->passport; ?>" alt="Admin"
-                                            class="rounded-circle p-2 " width="110">
-                                    <?php } else { ?>
-                                        <img src="<?php echo base_url() . 'assets/img/male.jpeg'; ?>" alt="Admin"
-                                            class="rounded-circle p-2 " width="110">
-                                    <?php } ?>
-                                    <div class="mt-3">
-                                        <h4>
-                                            <?php
-                                            echo strtoupper(@$customer->f_name . ' ' . @$customer->m_name . ' ' . @$customer->l_name);
-                                            ?>
-                                        </h4>
+        <!-- ===== Customer & Sponsor Cards ===== -->
+        <div class="row clearfix mb-4">
 
-                                        <b class="text-secondary mb-1"><?php echo @$customer->phone_no; ?></b>
-                                        <p class="text-muted font-size-sm"></p>
-                                        <?php
-                                       
-                                        $button_class = '';
-                                        if ($loan_status->loan_status == 'New Customer') {
-                                            $button_class = 'btn-primary'; // Green for new customers
-                                        } elseif ($loan_status->loan_status == 'Old Customer') {
-                                            $button_class = 'btn-warning'; // Blue for old customers
-                                        } else {
-                                            $button_class = 'btn-secondary'; // Gray as default for "No Loan"
-                                        }
-                                        ?>
-                                        <button class="btn <?= $button_class ?>"><?= $loan_status->loan_status ?></button>
-                                        <a href="<?php echo base_url("admin/customer_profile/$customer->customer_id") ?>"
-                                            class="btn btn-success">View More</a>
+            <!-- CUSTOMER CARD -->
+            <div class="col-12 col-md-6 col-xl-4 mb-3 mb-md-0">
+                <div class="card h-100">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <?php if (@$customer->passport): ?>
+                                <img src="<?php echo base_url() . $customer->passport; ?>" alt="Customer"
+                                    class="rounded-circle p-1 bg-primary" width="70">
+                            <?php else: ?>
+                                <img src="<?php echo base_url() . 'assets/img/male.jpeg'; ?>" alt="Customer"
+                                    class="rounded-circle p-1 bg-primary" width="70">
+                            <?php endif; ?>
+                            <div class="mt-2">
+                                <h6 class="mb-0"><?php echo strtoupper(@$customer->f_name . ' ' . @$customer->m_name . ' ' . @$customer->l_name); ?></h6>
+                                <small class="text-secondary"><?php echo @$customer->phone_no; ?></small>
+                                <div class="mt-1">
+                                <?php
+                                $loan_stat   = @$customer_loan->loan_status;
+                                $loan_end    = @$customer_loan->loan_end_date;
+                                $remain_debt = (float)(@$customer_loan->loan_int) - (float)(@$total_deposit->total_Deposit);
+                                $today       = date('Y-m-d');
 
+                                if ($loan_stat == 'disbarsed') {
+                                    // Loan approved but cash not yet given to customer
+                                    $ls_class = 'btn-warning';
+                                    $ls_label = 'Hajapewa Mkopo';
+                                } elseif ($remain_debt <= 0) {
+                                    // Fully repaid
+                                    $ls_class = 'btn-info';
+                                    $ls_label = 'Kamaliza Mkopo';
+                                } elseif ($remain_debt > 0 && $loan_end && $loan_end < $today) {
+                                    // Debt remains AND end date already passed — out of agreement
+                                    $ls_class = 'btn-danger';
+                                    $ls_label = 'Nje ya Mkataba';
+                                } elseif ($remain_debt > 0 && $loan_end && $loan_end >= $today) {
+                                    // Debt remains AND still within agreement period
+                                    $ls_class = 'btn-success';
+                                    $ls_label = 'Ndani ya Mkataba';
+                                } else {
+                                    $ls_class = 'btn-secondary';
+                                    $ls_label = 'Hakuna Mkopo';
+                                }
+                                ?>
+                                <button class="btn btn-sm <?= $ls_class ?>"><?= $ls_label ?></button>
+                                <a href="<?php echo base_url("admin/customer_profile/$customer->customer_id"); ?>"
+                                    class="btn btn-sm btn-outline-primary">Tazama zaidi</a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-2">
+                        <ul class="list-group list-group-flush" style="font-size:0.82rem">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                    Customer ID
+                                </span>
+                                <strong><span class="text-secondary"><?php echo @$customer->customer_code; ?></span></strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                  Kuchukua Mkopo
+                                </span>
+                                <strong><span class="text-secondary">
+                                    <?php echo @$customer_loan->loan_stat_date ?: 'YYY-MM-DD'; ?>
+                                </span></strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                 Kumaliza Mkopo
+                                </span>
+                                <strong><span class="text-secondary">
+                                    <?php echo @$customer_loan->loan_end_date ? substr($customer_loan->loan_end_date, 0, 10) : 'YY-DD-MM'; ?>
+                                </span></strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                   Last Payment Date
+                                </span>
+                                <strong><span class="text-secondary">
+                                    <?php echo !empty(@$end_deposit->deposit_day) ? substr($end_deposit->deposit_day, 0, 10) : 'YYY-MM-DD'; ?>
+                                </span></strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                  Kiasi cha Mkopo
+                                </span>
+                                <strong><span class="text-secondary"><?php echo number_format(@$customer_loan->loan_int); ?></span></strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                   Rejesho
+                                </span>
+                                <strong><span class="text-secondary"><?php echo number_format(@$customer_loan->restration); ?></span></strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                    Jumla ya Malipo
+                                </span>
+                                <?php if (@$total_deposit->total_Deposit > @$customer_loan->loan_int): ?>
+                                    <strong><span class="text-secondary"><?php echo number_format(@$customer_loan->loan_int); ?></span></strong>
+                                    <span class="text-danger">(+<?php echo number_format(@$total_deposit->total_Deposit - @$customer_loan->loan_int); ?>)</span>
+                                <?php else: ?>
+                                    <strong><span class="text-secondary"><?php echo number_format(@$total_deposit->total_Deposit); ?></span></strong>
+                                <?php endif; ?>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                   Baki ya Deni
+                                </span>
+                                <?php if (@$total_deposit->total_Deposit > @$customer_loan->loan_int): ?>
+                                    <strong><span class="text-secondary">0.00</span></strong>
+                                <?php else: ?>
+                                    <strong><span class="text-danger"><?php echo number_format(@$customer_loan->loan_int - @$total_deposit->total_Deposit); ?></span></strong>
+                                <?php endif; ?>
+                            </li>
+                            <li class="list-group-item py-2">
+                                <?php
+                                $loan_start_ts = strtotime((string) @$customer_loan->loan_stat_date);
+                                $loan_end_ts   = strtotime((string) @$customer_loan->loan_end_date);
+                                $today_ts      = strtotime(date('Y-m-d'));
+                                $remain_amount = max(0, (float) (@$customer_loan->loan_int) - (float) (@$total_deposit->total_Deposit));
+                                $pending_amount = (float) (@$total_recovery->total_pending);
 
+                                $duration_days = 0;
+                                $elapsed_days = 0;
+                                $time_progress = 0;
+
+                                if ($loan_start_ts && $loan_end_ts && $loan_end_ts > $loan_start_ts) {
+                                    $duration_days = max(1, (int) ceil(($loan_end_ts - $loan_start_ts) / 86400));
+                                    $elapsed_days = (int) floor(($today_ts - $loan_start_ts) / 86400);
+                                    if ($elapsed_days < 0) {
+                                        $elapsed_days = 0;
+                                    }
+                                    $time_progress = (int) round(($elapsed_days / $duration_days) * 100);
+                                    if ($time_progress < 0) {
+                                        $time_progress = 0;
+                                    }
+                                    if ($time_progress > 100) {
+                                        $time_progress = 100;
+                                    }
+                                }
+
+                                if ($remain_amount <= 0) {
+                                    $bar_class = 'bg-success';
+                                    $bar_text = 'Mkopo umekamilika';
+                                    $time_progress = 100;
+                                } elseif ($loan_end_ts && $today_ts > $loan_end_ts) {
+                                    $bar_class = 'bg-danger';
+                                    $days_late = (int) floor(($today_ts - $loan_end_ts) / 86400);
+                                    $bar_text = 'Nje ya mkataba - imechelewa siku ' . $days_late;
+                                    $time_progress = 100;
+                                } elseif ($loan_end_ts && ($loan_end_ts - $today_ts) <= (7 * 86400) && $pending_amount > 0) {
+                                    $bar_class = 'bg-danger';
+                                    $days_left = (int) ceil(($loan_end_ts - $today_ts) / 86400);
+                                    $bar_text = 'Hatari - imebaki siku ' . max(0, $days_left);
+                                } elseif ($pending_amount > 0) {
+                                    $bar_class = 'bg-warning';
+                                    $bar_text = 'Kuna malipo yaliyokosekana';
+                                } else {
+                                    $bar_class = 'bg-info';
+                                    $bar_text = 'Ndani ya mkataba';
+                                }
+                                ?>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="fw-bold text-secondary">Progress ya Mkopo</span>
+                                    <small class="text-muted"><?php echo $bar_text; ?></small>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar <?php echo $bar_class; ?>" role="progressbar"
+                                        style="width: <?php echo $time_progress; ?>%"
+                                        aria-valuenow="<?php echo $time_progress; ?>" aria-valuemin="0" aria-valuemax="100">
                                     </div>
                                 </div>
-                                <?php @$customer_loan = $this->queries->get_loan_active_customer($customer->customer_id);
-                                @$total_deposit = $this->queries->get_total_amount_paid_loan($customer_loan->loan_id);
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                  Rejesho/Idadi ya Malipo
+                                </span>
+                                <?php
+                                $installment_amount = (float)(@$customer_loan->restration);
+                                $total_paid_amount  = (float)(@$total_deposit->total_Deposit);
+                                $total_sessions     = (int)(@$customer_loan->session);
+                                $paid_sessions      = 0;
 
-                                @$out_stand = $this->queries->get_outstand_loan_customer($customer_loan->loan_id);
+                                if ($installment_amount > 0) {
+                                    $paid_sessions = (int) floor($total_paid_amount / $installment_amount);
+                                }
+
+                                if ($total_sessions > 0 && $paid_sessions > $total_sessions) {
+                                    $paid_sessions = $total_sessions;
+                                }
+
+                                $repayment_progress = $total_sessions > 0 ? ($paid_sessions . '/' . $total_sessions) : 'N/A';
+
+                                $loan_type_label = '';
+                                $loan_day = (int) (@$customer_loan->day);
+                                if ($loan_day === 1) {
+                                    $loan_type_label = ' (Siku)';
+                                } elseif ($loan_day === 7) {
+                                    $loan_type_label = ' (Wiki)';
+                                } elseif (in_array($loan_day, [28, 29, 30, 31], true)) {
+                                    $loan_type_label = ' (Mwezi)';
+                                }
                                 ?>
-                                <hr class="my-4">
-                                <ul class="list-group list-group-flush">
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <strong><span class="text-secondary"><?php echo $repayment_progress . $loan_type_label; ?></span></strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                Siku za Malipo Zisizolipwa
+                                </span>
+                                <?php
+                                $loan_day_value = (int) (@$customer_loan->day);
+                                $loan_session_total = (int) (@$customer_loan->session);
+                                $paid_installments = 0;
 
-                                        <h6 class="mb-0">Customer Id</h6>
+                                if ((float) (@$customer_loan->restration) > 0) {
+                                    $paid_installments = (int) floor((float) (@$total_deposit->total_Deposit) / (float) (@$customer_loan->restration));
+                                }
 
-                                       <strong><span class="text-secondary"> <?php echo @$customer->customer_code; ?></span></strong> 
+                                if ($loan_session_total > 0 && $paid_installments > $loan_session_total) {
+                                    $paid_installments = $loan_session_total;
+                                }
 
-                                    </li>
+                                $expected_installments = 0;
+                                $loan_start_ts = strtotime((string) @$customer_loan->loan_stat_date);
+                                if ($loan_start_ts && $loan_day_value > 0) {
+                                    $days_since_start = (int) floor((strtotime(date('Y-m-d')) - $loan_start_ts) / 86400);
+                                    if ($days_since_start >= 0) {
+                                        // First installment is due after the first full interval,
+                                        // not on the same day as loan_stat_date.
+                                        $expected_installments = (int) floor($days_since_start / $loan_day_value);
+                                    }
+                                }
 
+                                if ($loan_session_total > 0 && $expected_installments > $loan_session_total) {
+                                    $expected_installments = $loan_session_total;
+                                }
 
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6 class="mb-0">Withdraw Date</h6>
-                                        <?php if (@$customer_loan->loan_stat_date == TRUE) {
-                                            ?>
-
-                                          <strong><span class="text-secondary">
-                                          <?php echo @$customer_loan->loan_stat_date; ?></span></strong> 
-                                        <?php } elseif (@$customer_loan->loan_stat_date == FALSE) {
-                                            ?>
-                                           <strong><span class="text-secondary">YYY-MM-DD</span></strong> 
-                                        <?php } ?>
-
-                                    </li>
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6 class="mb-0">End Date</h6>
-                                        <?php if (@$customer_loan->loan_end_date == TRUE) {
-                                            ?>
-
-                                           <strong><span
-                                           class="text-secondary"><?php echo substr(@$customer_loan->loan_end_date, 0, 10); ?></span> </strong> 
-                                        <?php } elseif (@$customer_loan->loan_end_date == FALSE) {
-                                            ?>
-                                            <strong><span class="text-secondary">YY-DD-MM</span></strong>
-                                        <?php } ?>
-
-                                    </li>
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6 class="mb-0">Loan Amount</h6>
-                                       <strong><span
-                                       class="text-secondary"><?php echo number_format(@$customer_loan->loan_int); ?></span></strong> 
-                                    </li>
-
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6 class="mb-0">Collection</h6>
-                                       <strong> <span
-                                       class="text-secondary"><?php echo number_format(@$customer_loan->restration); ?></span></strong>
-                                    </li>
-
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6 class="mb-0">Paid Amount</h6>
-                                        <?php if (@$total_deposit->total_Deposit > @$customer_loan->loan_int) {
-                                            ?>
-                                            <strong><span
-                                            class="text-secondary"><?php echo number_format(@$customer_loan->loan_int); ?></span></strong>
-
-                                            <span
-                                                style="color: red">(<?php echo number_format(@$total_deposit->total_Deposit - @$customer_loan->loan_int); ?>)<span>
-                                                <?php } else { ?>
-                                                    <strong><span
-                                                    class="text-secondary"><?php echo number_format(@$total_deposit->total_Deposit); ?></span></strong>
-                                                <?php } ?>
-
-                                    </li>
-
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6 class="mb-0">Remain debt</h6>
-                                        <?php if (@$total_deposit->total_Deposit > @$customer_loan->loan_int) {
-                                            ?>
-                                            <strong><span class="text-secondary">0.00</span></strong>
-                                        <?php } else { ?>
-                                           <strong><span
-                                           class="text-secondary"><?php echo number_format(@$customer_loan->loan_int - @$total_deposit->total_Deposit); ?></span></strong> 
-                                        <?php } ?>
-
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-4">Loan Information</h4>
-                                <table class="table table-bordered">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th scope="col"></th>
-                                           
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>number repayment: <input type="text" readonly class="form-control"
-                                            value="<?= $repayments ?? 'No data' ?>"></td>
-                                           
-                                        </tr>
-                                        <tr>
-                                            <td>number Days repaid :  <input type="text" readonly class="form-control"
-                                            value="<?= $paid_days->lecod_count ?? 0 ?>"></td>
-                                           
-                                        </tr>
-                                       
-                                        <tr>
-                                            <td>Missed Amount:  <?php
-                                                @$total_recovery = $this->queries->get_total_loan_pend($customer_loan->loan_id);
-                                                ?>
-                                                <input type="text" readonly
-                                                    class="form-control <?= $total_recovery->total_pending != 0.00 ? 'text-danger' : '' ?>"
-                                                    value="<?= number_format($total_recovery->total_pending ?? 0.00, 2); ?>"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Total Penalty: <?php
-                                                @$total_penart = $this->queries->get_total_penart_loan($customer_loan->loan_id);
-                                                @$total_deposit_penart = $this->queries->get_total_paypenart($customer_loan->loan_id);
-                                                ?>
-                                                <input type="text" readonly class="form-control"
-                                                    style="color: <?= ($total_penart->total_penart - $total_deposit_penart->total_penart_paid) != 0.00 ? 'red' : 'black'; ?>;"
-                                                    value="<?= number_format($total_penart->total_penart - $total_deposit_penart->total_penart_paid, 2); ?>"></td>
-                                            
-                                        </tr>
-                                        <tr>
-                                            <td>Guarantors Names: <?php if (!empty($sponsors)) : ?>
-    <?php foreach ($sponsors as $sponsor) : ?>
-         
-        <input type="text" readonly class="form-control"
-        value="<?php echo $sponsor['sp_name']; ?>"> 
-    
-   
-         <input type="text" readonly class="form-control"
-        value=" <?php echo $sponsor['sp_lname']; ?>">
-   
-        <input type="text" readonly class="form-control"
-        value="<?php echo $sponsor['sp_phone_no']; ?>"> 
-       
-    <?php endforeach; ?>
-<?php else : ?>
-    <p>No Guarantors available.</p>
-<?php endif; ?></td>
-
-     
-                                           
-                                        </tr>
-                                        <!-- <tr>
-                                            <td>Loan Status: <input type="button" class="btn btn-info px-4" value="Not Given"></td>
-                                            
-                                        </tr>
-                                        <tr>
-                                            <td>Repayment Status:<input type="button" class="btn btn-info px-4" value="Save Changes"></td>
-               
-                                        </tr> -->
-
-                                        <!-- <tr>
-                    <td colspan="2" class="text-end">
-                        <input type="button" class="btn btn-primary px-4" value="Save Changes">
-                    </td>
-                </tr> -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-12">
-
-                            </div>
-                        </div>
+                                $days_not_paid = max(0, $expected_installments - $paid_installments);
+                                ?>
+                                <strong><span class="text-danger"><?php echo $days_not_paid; ?></span></strong>
+                            </li>
+                            <!-- <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="me-1 icon-inline text-warning">
+                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>Missed Amount
+                                </span>
+                                <strong><span class="<?= (@$total_recovery->total_pending != 0.00) ? 'text-danger' : 'text-secondary' ?>">
+                                    <?php echo number_format($total_recovery->total_pending ?? 0.00, 2); ?>
+                                </span></strong>
+                            </li> -->
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                <span class="fw-bold">
+                                    Jumla ya Faini
+                                </span>
+                                <?php $penalty_remain = (@$total_penart->total_penart - @$total_deposit_penart->total_penart_paid); ?>
+                                <strong><span style="color:<?= $penalty_remain != 0.00 ? 'red' : 'inherit'; ?>">
+                                    <?php echo number_format($penalty_remain, 2); ?>
+                                </span></strong>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
+
+            <!-- SPONSOR / GUARANTOR CARD -->
+           <div class="col-12 col-md-6 col-xl-4 ml-md-auto">
+                <div class="card h-100">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <div class="rounded-circle p-1 bg-warning d-flex align-items-center justify-content-center"
+                                style="width:70px;height:70px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24"
+                                    fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <div class="mt-2">
+                                <h6 class="mb-0">Guarantors / Sponsors</h6>
+                                <small class="text-secondary">Loan Reference Contacts</small><br>
+                                <small class="text-muted">
+                                    <?php echo !empty($sponsors) ? count($sponsors) . ' Guarantor(s) on record' : 'No guarantors'; ?>
+                                </small>
+                            </div>
+                        </div>
+                        <hr class="my-2">
+                        <?php if (!empty($sponsors)): ?>
+                            <?php foreach ($sponsors as $i => $sponsor): ?>
+                                <?php if ($i > 0): ?>
+                                    <hr class="my-1">
+                                <?php endif; ?>
+                                <small class="text-muted fw-bold">Guarantor #<?php echo ($i + 1); ?></small>
+                                <ul class="list-group list-group-flush mb-1" style="font-size:0.82rem">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                        <span class="fw-bold">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="me-1 icon-inline text-primary">
+                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                <circle cx="12" cy="7" r="4"></circle>
+                                            </svg>First Name
+                                        </span>
+                                        <strong><span class="text-secondary"><?php echo htmlspecialchars($sponsor['sp_name']); ?></span></strong>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                        <span class="fw-bold">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="me-1 icon-inline text-primary">
+                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                <circle cx="12" cy="7" r="4"></circle>
+                                            </svg>Last Name
+                                        </span>
+                                        <strong><span class="text-secondary"><?php echo htmlspecialchars($sponsor['sp_lname']); ?></span></strong>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap py-1">
+                                        <span class="fw-bold">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="me-1 icon-inline text-success">
+                                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5 19.79 19.79 0 0 1 1.21 3 2 2 0 0 1 3.22 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.29 6.29l1.12-1.56a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                            </svg>Phone
+                                        </span>
+                                        <strong><span class="text-secondary"><?php echo htmlspecialchars($sponsor['sp_phone_no']); ?></span></strong>
+                                    </li>
+                                </ul>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="text-center py-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                    fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                <p class="text-muted mt-3">No guarantors available for this loan.</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 
 
-        <div class="row clearfix">
+        
 
 
-            <style>
-                .sam {
-                    display: flex;
-                }
-            </style>
-
+         
 
 
 
@@ -284,11 +429,11 @@
 
             <div class="col-lg-12">
                 <div class="card">
-                    <?php echo form_open("admin/search_customerData"); ?>
+                    <?php echo form_open('admin/search_customerData', ['id' => 'searchCustomerForm']); ?>
                     <div class="sam">
 
-                        <select type="number" class="form-control select2" name="customer_id" required>
-                            <option>Search Customer</option>
+                        <select id="customerSearchSelect" class="form-control select2" name="customer_id" required>
+                            <option value="">Search Customer</option>
                             <?php foreach ($customery as $customer_datas): ?>
                                 <option value="<?php echo $customer_datas->customer_id; ?>">
                                     <?php echo $customer_datas->f_name; ?>     <?php echo $customer_datas->m_name; ?>
@@ -297,7 +442,6 @@
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <button type="submit" class="btn btn-primary"><i class="icon-magnifier-add">Search</i></button>
 
                     </div>
                     <?php echo form_close(); ?>
@@ -425,6 +569,18 @@
 
 
 <?php include('incs/footer.php'); ?>
+
+<script>
+    /* Auto-submit search form when a customer is selected */
+    $(function () {
+        $('#customerSearchSelect').on('change', function () {
+            var val = $(this).val();
+            if (val && val !== '') {
+                $('#searchCustomerForm').submit();
+            }
+        });
+    });
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

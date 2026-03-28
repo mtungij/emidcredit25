@@ -236,6 +236,61 @@ button:focus {
         max-height: 40px;
         max-width: 160px;
     }
+
+    /* Smooth modern UI */
+body {
+    background-color: #f5f7fb;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: 0.2s ease;
+}
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+/* Badges */
+.badge {
+    border-radius: 999px;
+    padding: 6px 12px;
+}
+
+/* Table */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+.table thead {
+    background: #f1f3f9;
+}
+.table th {
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+.table td {
+    vertical-align: middle;
+}
+
+/* Form */
+.form-control {
+    border-radius: 10px;
+}
+
+/* Section spacing */
+.section-space {
+    margin-top: 20px;
+}
 }
 </style>
 

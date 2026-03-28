@@ -34,33 +34,33 @@
                             <div class="row">
                                <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Loan Product name</label>
-                                    <input type="text" name="loan_name" autocomplete="off" class="form-control" placeholder="Enter Loan Product Name" required>
+                                    <label>Aina Ya Mkopo</label>
+                                    <input type="text" name="loan_name" autocomplete="off" class="form-control" placeholder="Mfano: Mkopo wa Biashara" required>
                                 </div>
                                 </div>
                                 <div class="col-md-2">
                                 <div class="form-group">
-                                    <label>From</label>
-                                    <input type="number" name="loan_price" autocomplete="off" class="form-control" placeholder="Eg.100000" required>
+                                    <label>Kiasi Cha Chini</label>
+                                    <input type="number" name="loan_price" autocomplete="off" class="form-control" placeholder="Mfano: 50000" required>
                                 </div>
                                 </div>
                                  <div class="col-md-2">
                                 <div class="form-group">
-                                    <label>To</label>
-                                    <input type="number" name="loan_perday" autocomplete="off" class="form-control" placeholder="Eg.1000000" required>
+                                    <label>Kiasi Cha Juu</label>
+                                    <input type="number" name="loan_perday" autocomplete="off" class="form-control" placeholder="Mfano: 1000000" required>
                                 </div>
                                 </div>
                                 <input type="hidden" name="comp_id" value="<?php echo $_SESSION['comp_id']; ?>">
                                   <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Laon Interest(%)</label>
-                                    <input type="text" name="interest_formular" autocomplete="off" class="form-control" placeholder="Enter Loan Enterest(%)" required>
+                                    <label>Riba(%)</label>
+                                    <input type="text" name="interest_formular" autocomplete="off" class="form-control" placeholder="Mfano: 20" required>
                                 </div>
                                 </div>
                                 <br>
                                 </div>
                                 <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="icon-drawer">Save</i></button>
+                                <button type="submit" class="btn btn-primary"><i class="icon-drawer">Hifadhi</i></button>
                                 </div>
                             
                             <?php echo form_close();  ?>
@@ -72,7 +72,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                          <div class="header">
-                            <h2>Loan Category/Product List </h2>    
+                            <h2>Orodha ya Aina za Mikopo  </h2>
                              </div>
                           <div class="body">
                             <div class="table-responsive">
@@ -80,10 +80,10 @@
                                     <thead class="thead-primary">
                                         <tr>
                                             <th>S/No.</th>
-                                            <th>Loan Category/Product</th>
-                                            <th>Loan Level</th>
-                                            <th>Loan Interest</th>
-                                            <th>Action</th>
+                                            <th>Aina ya Mkopo</th>
+                                            <th>Kiwango cha Mkopo</th>
+                                            <th>Riba ya Mkopo</th>
+                                            <th>Hatua</th>
                                         </tr>
                                     </thead>
                                    
@@ -106,33 +106,33 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="title" id="defaultModalLabel">Edit Loan Product</h6>
+                <h6 class="title" id="defaultModalLabel">Hariri Mkopo</h6>
             </div>
             <?php echo form_open("admin/update_loanCategory/{$loan_categorys->category_id}"); ?>
             <div class="modal-body">
                 <div class="row clearfix">
                     <div class="col-md-4">
-                        <span>Loan Category Name</span>
+                        <span>Aina ya Mkopo</span>
                         <input type="text" class="form-control" autocomplete="off" name="loan_name" value="<?php echo $loan_categorys->loan_name; ?>">
                     </div>
                      <div class="col-md-2">
-                        <span>From</span>
+                        <span>Kutoka</span>
                         <input type="number" class="form-control" autocomplete="off" name="loan_price" value="<?php echo $loan_categorys->loan_price; ?>">
                     </div>
                      <div class="col-md-2">
-                        <span>To</span>
+                        <span>Hadi</span>
                         <input type="number" class="form-control" autocomplete="off" name="loan_perday" value="<?php echo $loan_categorys->loan_perday; ?>">
                     </div>
                      <div class="col-md-4">
-                        <span>Loan Interest(%)</span>
+                        <span>Riba ya Mkopo(%)</span>
                         <input type="text" class="form-control" autocomplete="off" name="interest_formular" value="<?php echo $loan_categorys->interest_formular; ?>">
                     </div>
                     
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Update</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
+                <button type="submit" class="btn btn-primary">Hifadhi</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Funga</button>
             </div>
             <?php echo form_close(); ?>
         </div>

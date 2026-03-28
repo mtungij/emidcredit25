@@ -2408,6 +2408,7 @@ public function disburse($loan_id){
 	$comp_id = $this->session->userdata('comp_id');
 	$admin_data = $this->queries->get_admin_role($comp_id);
 	$loan_fee = $this->queries->get_loanfee($comp_id);
+  $fee_category = $this->queries->get_loanfee_categoryData($comp_id);
 	$loan_data = $this->queries->get_loanDisbarsed($loan_id);
 	$loan_data_interst = $this->queries->get_loanInterest($loan_id);
 	$loan_fee_sum = $this->queries->get_sumLoanFee($comp_id);
@@ -2428,6 +2429,7 @@ public function disburse($loan_id){
 	  $phone = $loan_data->phone_no;
 	  $day = $loan_data->day;
 	  $session = $loan_data->session;
+    $category_fee = @$fee_category->fee_category;
 
 	  //admin data
 	  $role = $admin_data->role;
@@ -2493,35 +2495,46 @@ public function disburse($loan_id){
       // $phone = $phones;
 
       $loan_fee_type = $this->queries->get_loanfee_type($comp_id);
-      $type = $loan_fee_type->type;
-      $this->insert_loan_aprovedDisburse($comp_id,$loan_id,$customer_id,$blanch_id,$balance,$role,$group_id);
+    $loan_category = $this->queries->get_loanproduct_fee($loan_id);
+      $type = @$loan_fee_type->type;
+      $pay_id = $this->insert_loan_aprovedDisburse($comp_id,$loan_id,$customer_id,$blanch_id,$balance,$role,$group_id);
 	  $unchangable_balance = $balance;
+        if ($category_fee == 'GENERAL') {
         if ($type == 'PERCENTAGE VALUE') {
-	  for ($i=0; $i<count($loan_fee); $i++) { 
-		$interest = $loan_fee[$i]->fee_interest;
-		$fee_description = $loan_fee[$i]->description;
-		$fee_number = $loan_fee[$i]->fee_interest;
-	  	$withdraw_balance = $unchangable_balance * ($interest / 100);
-
-	  	
-	  	$new_balance = $balance - $withdraw_balance;
+    for ($i=0; $i<count($loan_fee); $i++) { 
+    $interest = $loan_fee[$i]->fee_interest;
+    $withdraw_balance = $unchangable_balance * ($interest / 100);
+    $new_balance = $balance - $withdraw_balance;
         $pay_id = $this->insert_loanfee($loan_fee[$i]->fee_id,$loan_fee[$i]->fee_interest,$loan_fee[$i]->description,$loan_fee[$i]->fee_interest,$loan_id,$blanch_id,$comp_id,$customer_id,$new_balance, $withdraw_balance,$group_id);
-     //Update Balance in this Loop
         $balance = $new_balance;   
     }
    }elseif ($type == 'MONEY VALUE') {
-   	 for ($i=0; $i<count($loan_fee); $i++) { 
-		$interest = $loan_fee[$i]->fee_interest;
-		$fee_description = $loan_fee[$i]->description;
-		$fee_number = $loan_fee[$i]->fee_interest;
-	  	$withdraw_balance = $interest;
-
-	  	
-	  	$new_balance = $balance - $withdraw_balance;
+     	 for ($i=0; $i<count($loan_fee); $i++) { 
+    $interest = $loan_fee[$i]->fee_interest;
+    	$withdraw_balance = $interest;
+    $new_balance = $balance - $withdraw_balance;
         $pay_id = $this->insert_loanfee_money($loan_fee[$i]->fee_id,$loan_fee[$i]->fee_interest,$loan_fee[$i]->description,$loan_fee[$i]->fee_interest,$loan_id,$blanch_id,$comp_id,$customer_id,$new_balance, $withdraw_balance,$group_id);
-
-     //Update Balance in this Loop
         $balance = $new_balance;   
+    }
+   }
+   }elseif ($category_fee == 'LOAN PRODUCT') {
+    $fee_description = 'Loan Processing Fee';
+    $loan_fee_id = '0';
+    $fee_category_type = @$loan_category->fee_category_type;
+    $fee_value = (float) @$loan_category->fee_value;
+
+    if ($fee_category_type == 'PERCENTAGE' && $fee_value > 0) {
+      $symbol = '%';
+      $withdraw_balance = $unchangable_balance * ($fee_value / 100);
+      $new_balance = $balance - $withdraw_balance;
+      $pay_id = $this->insert_loanfee_money_feetype($loan_fee_id,$fee_description,$fee_value,$loan_id,$blanch_id,$comp_id,$customer_id,$new_balance,$group_id,$symbol,$withdraw_balance);
+      $balance = $new_balance;
+    } elseif ($fee_category_type == 'MONEY' && $fee_value > 0) {
+      $symbol = 'Tsh';
+      $withdraw_balance = $fee_value;
+      $new_balance = $balance - $withdraw_balance;
+      $pay_id = $this->insert_loanfee_money_feetype($loan_fee_id,$fee_description,$fee_value,$loan_id,$blanch_id,$comp_id,$customer_id,$new_balance,$group_id,$symbol,$withdraw_balance);
+      $balance = $new_balance;
     }
    }
 
@@ -2539,6 +2552,7 @@ public function disburse($loan_id){
         public function insert_loan_aprovedDisburse($comp_id,$loan_id,$customer_id,$blanch_id,$balance,$role,$group_id){
       	$day = date("Y-m-d");
       $this->db->query("INSERT INTO tbl_pay (`comp_id`,`loan_id`,`customer_id`,`blanch_id`,`balance`,`depost`,`emply`,`description`,`group_id`,`date_data`) VALUES ('$comp_id','$loan_id', '$customer_id','$blanch_id','$balance','$balance','$role','CASH DEPOST','$group_id','$day')");
+      return $this->db->insert_id();
       }
 
 
@@ -3197,10 +3211,16 @@ public function disburse($loan_id){
     $missed_days = $this->queries-> get_total_missed_days($customer_id);
     $missed_amount =$this->queries->get_total_missed_amount($customer_id);
     $loan_status= $this->queries->get_customer_status($customer_id);
-    $sponsors =$this->queries->get_latest_sponsor_data($customer_id);
+    @$customer_loan = $this->queries->get_loan_active_customer($customer_id);
+    @$loan_id = $customer_loan->loan_id;
+    $sponsors = [];
+    if ($loan_id) {
+      // Keep only the most recent sponsor for this loan.
+      $sponsors = array_slice($this->queries->get_sponsors_by_loan_id($loan_id), 0, 1);
+    }
    
 //  echo "<pre>";
-//   print_r($sponsors);
+//   print_r($customer_loan);
 //            exit();
 
    
@@ -3282,36 +3302,36 @@ public function create_withdrow_balance($customer_id){
         // print_r($loan_aprove);
         //          exit();
          //company loan fee setting
+         $sum_total_loanFee = 0; // Initialize to prevent undefined variable errors
          $comp_fee = $this->queries->get_loanfee_categoryData($comp_id);
          $aina_makato = $comp_fee->fee_category;
           //loanfee setting
          $fee_type = $this->queries->get_loanfee_type($comp_id);
-         $type = $fee_type->type;
+         $type = @$fee_type->type;
 
           
          if ($aina_makato == 'LOAN PRODUCT') {
          $category_loan = $this->queries->get_loanproduct_fee($loan_id);
-         $fee_category_type = $category_loan->fee_category_type;
-         $fee_value = $category_loan->fee_value;
+         $fee_category_type = @$category_loan->fee_category_type;
+         $fee_value = @$category_loan->fee_value;
             if ($fee_category_type == 'MONEY') {
             $sum_fee = $this->queries->get_sumfeepercentage($loan_id);
-		    $fee = $sum_fee->total_fee;
+		    $fee = @$sum_fee->total_fee;
 		    $sum_total_loanFee = $fee;
             }elseif ($fee_category_type == 'PERCENTAGE') {
-            	echo "makato ya percent";
             $sum_fee = $this->queries->get_sumfeepercentage($loan_id);
-		    $fee = $sum_fee->total_fee;
+		    $fee = @$sum_fee->total_fee;
 		    $sum_total_loanFee = $loan_aprove * $fee / 100;	
             }
                
           }elseif ($aina_makato == 'GENERAL') {
           if ($type == 'PERCENTAGE VALUE') {
           $sum_fee = $this->queries->get_sumfeepercentage($loan_id);
-		  $fee = $sum_fee->total_fee;
+		  $fee = @$sum_fee->total_fee;
 		  $sum_total_loanFee = $loan_aprove * $fee / 100;
 		  }elseif ($type == 'MONEY VALUE') {
 		  $sum_fee = $this->queries->get_sumfeepercentage($loan_id);
-		  $fee = $sum_fee->total_fee;
+		  $fee = @$sum_fee->total_fee;
 		  $sum_total_loanFee = $fee;
 		 }
 

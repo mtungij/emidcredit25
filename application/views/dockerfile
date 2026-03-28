@@ -1,11 +1,11 @@
 docker run -it -d \
-  --label traefik.http.routers.pharmacy.rule=Host\(\`pharmacy.phamasoft.com\`\) \
-  --label traefik.http.routers.pharmacy.tls.certresolver=lets-encrypt \
-  --label traefik.http.routers.pharmacy.tls=true \
-  --label traefik.http.routers.pharmacy.service=pharmacy-credit-http \
-  --label traefik.http.services.pharmacy-credit-http.loadbalancer.server.port=80 \
-  --name dawa \
+  --label traefik.http.routers.chironimicrofinance.rule=Host\(\`chironimicrofinance.phamasoft.com\`\) \
+  --label traefik.http.routers.chironimicrofinance.tls.certresolver=lets-encrypt \
+  --label traefik.http.routers.chironimicrofinance.tls=true \
+  --label traefik.http.routers.chironimicrofinance.service=chironimicrofinance-credit-http \
+  --label traefik.http.services.chironimicrofinance-credit-http.loadbalancer.server.port=80 \
+  --name chironimicrofinance \
   --network web \
   --restart always \
   --expose 80 \
-  emasanga/mikoposoft:may13
+ emasanga/mikoposoft:emid_credit10sep

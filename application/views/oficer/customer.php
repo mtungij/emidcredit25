@@ -68,16 +68,7 @@
 
                                 <input type="hidden" name="blanch_id" value="<?php echo $empl_data->blanch_id; ?>">
 
-                                <div class="col-lg-4 col-6">
-                                    <span><?php echo $this->lang->line("employee_menu") ?>:</span>
-                                <select type="number" name="empl_id" class="form-control select2 input-sm" id="empl" required class="form-control input-sm">
-                                <option value="<?php echo $empl_data->empl_id; ?>"><?php echo $empl_data->empl_name; ?></option>
-                                <?php foreach ($employee as $employees): ?>
-                                <option value="<?php echo $employees->empl_id; ?>"><?php echo $employees->empl_name; ?></option>
-                                <?php endforeach; ?>
-                                
-                            </select>
-                                </div>
+                                <input type="hidden" name="empl_id" value="<?php echo $empl_data->empl_id; ?>">
                         
                                 <div class="col-lg-4 col-6">
                                     <span><?php echo $this->lang->line("gender_menu"); ?>:</span>
@@ -112,10 +103,7 @@
                             </select>
                                 </div> -->
                                 <input type="hidden" name="region_id" value="1">
-                                    <div class="col-lg-4 col-6">
-                                    <span><?php echo $this->lang->line("district_menu"); ?>:</span>
-                            <input type="text" name="district" placeholder="<?php echo $this->lang->line("district_menu"); ?>" autocomplete="off" class="form-control input-sm" required>
-                                </div>
+                                <input type="hidden" name="district" value="">
                                     <div class="col-lg-6 col-6">
                                     <span><?php echo $this->lang->line("ward_menu"); ?>:</span>
                             <input type="text" name="ward" placeholder="<?php echo $this->lang->line("ward_menu"); ?>" autocomplete="off" class="form-control input-sm" required>

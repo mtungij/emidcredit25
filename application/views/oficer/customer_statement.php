@@ -78,7 +78,6 @@
                                         <tr>
                                         <th><?php echo $this->lang->line("customer_name_menu"); ?></th>
                                         <th><?php echo $this->lang->line("phone_number_menu"); ?></th>
-                                        <th><?php echo $this->lang->line("district_menu"); ?></th>
                                         <th><?php echo $this->lang->line("ward_menu"); ?></th>
                                         <th><?php echo $this->lang->line("street_menu"); ?></th>
                                         </tr>
@@ -98,8 +97,6 @@
                                         <tr>
                                             <td><?php echo @$customer->f_name; ?> <?php echo @$customer->m_name; ?> <?php echo @$customer->l_name; ?></td>
                                             <td><?php echo @$customer->phone_no; ?></td> 
-                                                
-                                            <td><?php echo @$customer->district; ?></td>
                                             <td><?php echo @$customer->ward; ?></td>
                                             <td><?php echo @$customer->street; ?></td>
                                         

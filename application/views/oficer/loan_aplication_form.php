@@ -87,15 +87,7 @@ $paid = @$paid_penart->total_PaidPenart;
                                             <?php //endforeach; ?>
                                         </select>
                                     </div> -->
-                                    <div class="col-lg-3 form-group-sub">
-                                        <span><?php echo $this->lang->line("employee_menu"); ?>:</span>
-                                        <select type="number" name="empl_id" class="form-control select2">
-                                            <option value="<?php echo $customer->empl_id; ?>"><?php echo $customer->empl_name; ?></option>
-                                            <?php foreach ($mpl_data_blanch as $mpl_data_blanchs): ?>
-                                            <option value="<?php echo $mpl_data_blanchs->empl_id; ?>"><?php echo $mpl_data_blanchs->empl_name; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
+                                    <input type="hidden" name="empl_id" value="<?php echo $empl_data->empl_id; ?>">
 
                                     <input type="hidden" name="comp_id" value="<?php echo $empl_data->comp_id; ?>">
                                     <input type="hidden" name="customer_id" value="<?php echo $customer->customer_id; ?>">
@@ -234,15 +226,7 @@ $paid = @$paid_penart->total_PaidPenart;
                                             <?php //endforeach; ?>
                                         </select>
                                     </div> -->
-                                    <div class="col-lg-3 form-group-sub">
-                                        <span><?php echo $this->lang->line("employee_menu"); ?>:</span>
-                                        <select type="number" name="empl_id" class="form-control select2">
-                                            <option value="<?php echo $customer->empl_id; ?>"><?php echo $customer->empl_name; ?></option>
-                                            <?php foreach ($mpl_data_blanch as $mpl_data_blanchs): ?>
-                                            <option value="<?php echo $mpl_data_blanchs->empl_id; ?>"><?php echo $mpl_data_blanchs->empl_name; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
+                                    <input type="hidden" name="empl_id" value="<?php echo $empl_data->empl_id; ?>">
 
                                     <input type="hidden" name="comp_id" value="<?php echo $empl_data->comp_id; ?>">
                                     <input type="hidden" name="customer_id" value="<?php echo $customer->customer_id; ?>">
@@ -359,15 +343,7 @@ $paid = @$paid_penart->total_PaidPenart;
                                             <?php //endforeach; ?>
                                         </select>
                                     </div> -->
-                                    <div class="col-lg-3 form-group-sub">
-                                        <span><?php echo $this->lang->line("employee_menu"); ?>:</span>
-                                        <select type="number" name="empl_id" class="form-control select2">
-                                            <option value="<?php echo $customer->empl_id; ?>"><?php echo $customer->empl_name; ?></option>
-                                            <?php foreach ($mpl_data_blanch as $mpl_data_blanchs): ?>
-                                            <option value="<?php echo $mpl_data_blanchs->empl_id; ?>"><?php echo $mpl_data_blanchs->empl_name; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
+                                    <input type="hidden" name="empl_id" value="<?php echo $empl_data->empl_id; ?>">
 
                                     <input type="hidden" name="comp_id" value="<?php echo $empl_data->comp_id; ?>">
                                     <input type="hidden" name="customer_id" value="<?php echo $customer->customer_id; ?>">
@@ -508,15 +484,7 @@ $paid = @$paid_penart->total_PaidPenart;
                                             <?php //endforeach; ?>
                                         </select>
                                     </div> -->
-                                    <div class="col-lg-3 form-group-sub">
-                                        <span><?php echo $this->lang->line("employee_menu"); ?>:</span>
-                                        <select type="number" name="empl_id" class="form-control select2">
-                                            <option value="<?php echo $customer->empl_id; ?>"><?php echo $customer->empl_name; ?></option>
-                                            <?php foreach ($mpl_data_blanch as $mpl_data_blanchs): ?>
-                                            <option value="<?php echo $mpl_data_blanchs->empl_id; ?>"><?php echo $mpl_data_blanchs->empl_name; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
+                                    <input type="hidden" name="empl_id" value="<?php echo $empl_data->empl_id; ?>">
 
                                     <input type="hidden" name="comp_id" value="<?php echo $empl_data->comp_id; ?>">
                                     <input type="hidden" name="customer_id" value="<?php echo $customer->customer_id; ?>">

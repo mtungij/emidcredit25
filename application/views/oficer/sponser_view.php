@@ -40,20 +40,22 @@
 
                     <div class="card">
                         <div class="row profile_state">
-                            <div class="col-lg-6 col-6">
-                                <div class="body">
-                                    <i class="fa fa-thumbs-up"></i>
-                                     <div class="profile-image"> <img src="<?php echo base_url().'assets/img/male.jpeg'; ?>" class="rounded-circle" alt="customer image" style="width: 135px;height: 135px;">
-                                      </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="body text-center">
+                                    <div class="profile-image mb-2">
+                                        <img src="<?php echo base_url().'assets/img/male.jpeg'; ?>" class="rounded-circle img-thumbnail" alt="Customer image" style="width: 140px;height: 140px;object-fit:cover;">
+                                    </div>
+                                    <h6 class="mb-1">Customer</h6>
                                     <small><?php echo $customer->f_name; ?> <?php echo $customer->m_name; ?> <?php echo $customer->l_name; ?></small>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-6">
-                                <div class="body">
-                                    <i class="fa fa-star"></i>
-                                   <div class="profile-image"> <img src="<?php echo base_url().'assets/img/sig.jpg'; ?>" class="rounded-circle" alt="Gualantors image" style="width: 135px;height: 135px;">
-                                      </div>
-                                    <small><?php echo $this->lang->line("signature_menu"); ?></small>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="body text-center">
+                                    <div class="profile-image mb-2">
+                                        <img src="<?php echo !empty($sponser->sp_passport) ? base_url($sponser->sp_passport) : base_url().'assets/img/male.jpeg'; ?>" class="rounded-circle img-thumbnail" alt="Sponsor passport" style="width: 140px;height: 140px;object-fit:cover;">
+                                    </div>
+                                    <h6 class="mb-1">Sponsor</h6>
+                                    <small><?php echo !empty($sponser->sp_passport) ? 'Passport Uploaded' : 'No Passport Uploaded'; ?></small>
                                 </div>
                             </div>
                            
@@ -74,7 +76,6 @@
                                             <th><?php echo $this->lang->line("phone_number_menu"); ?></th>
                                             <th><?php echo $this->lang->line("employee_menu"); ?></th>
                                             <th><?php echo $this->lang->line("branch_menu"); ?></th>
-                                            <th><?php echo $this->lang->line("district_menu"); ?></th>
                                             <th><?php echo $this->lang->line("ward_menu"); ?></th>
                                             <th><?php echo $this->lang->line("street_menu"); ?></th>
                                         </tr>
@@ -88,7 +89,6 @@
                                             <td><?php echo $customer->phone_no; ?></td>
                                             <td><?php echo $customer->empl_name; ?></td>
                                             <td><?php echo $customer->blanch_name; ?></td>
-                                            <td><?php echo $customer->district; ?></td>
                                             <td><?php echo $customer->ward; ?></td>
                                             <td><?php echo $customer->street; ?></td>
                                         </tr>
@@ -116,6 +116,7 @@
                                             <th><?php echo $this->lang->line("full_name_menu"); ?></th>
                                             <th><?php echo $this->lang->line("phone_number_menu"); ?></th>
                                             <th><?php echo $this->lang->line("relationship"); ?></th>
+                                            <th>Passport</th>
                                             <th><?php echo $this->lang->line("action_menu"); ?></th>
                                         </tr>
                                     </thead>
@@ -127,6 +128,13 @@
                                             <td><?php echo $sponsers_datas->sp_name; ?> <?php echo $sponsers_datas->sp_mname; ?> <?php echo $sponsers_datas->sp_lname; ?></td>
                                             <td><?php echo $sponsers_datas->sp_phone_no; ?></td>
                                             <td><?php echo $sponsers_datas->sp_relation; ?></td>
+                                            <td>
+                                                <?php if (!empty($sponsers_datas->sp_passport)): ?>
+                                                    <img src="<?php echo base_url($sponsers_datas->sp_passport); ?>" alt="Guarantor passport" class="img-thumbnail" style="width:45px;height:45px;object-fit:cover;">
+                                                <?php else: ?>
+                                                    -
+                                                <?php endif; ?>
+                                            </td>
                                             <td><a href="" class="btn btn-sm btn-icon btn-pure btn-primary on-default m-r-5 button-edit"
                                             data-toggle="modal" data-target="#addcontact1<?php echo $sponsers_datas->sp_id; ?>" data-original-title="Edit"><i class="icon-pencil"></i>
                                         </a>
@@ -135,12 +143,12 @@
                                 </tr>
 
                 <div class="modal fade" id="addcontact1<?php echo $sponsers_datas->sp_id; ?>" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="title" id="defaultModalLabel"><?php echo $this->lang->line("update_menu"); ?></h6>
             </div>
-     <?php echo form_open("oficer/modify_sponser/{$sponsers_datas->sp_id}/{$sponsers_datas->customer_id}"); ?>
+     <?php echo form_open_multipart("oficer/modify_sponser/{$sponsers_datas->sp_id}/{$sponsers_datas->customer_id}"); ?>
             <div class="modal-body">
                 <div class="row clearfix">
                              <div class="col-lg-4 col-6">
@@ -164,6 +172,19 @@
                       <span><?php echo $this->lang->line("relationship"); ?>:</span>  
                         <input type="text" class="form-control" id="sp_relation" value="<?php echo $sponsers_datas->sp_relation ?>" placeholder="Enter Reationship With Customer" name="sp_relation" autocomplete="off">
                     </div>
+                                        <div class="col-lg-12 col-12">
+                                            <span>Guarantor Passport:</span>
+                                                <input type="file" class="form-control sponsor-passport-input" name="sp_passport" accept="image/*">
+                                                <input type="hidden" name="sp_passport_cropped" class="sp-passport-cropped" value="">
+                                                <input type="hidden" name="old_sp_passport" value="<?php echo $sponsers_datas->sp_passport; ?>">
+                                                <?php if (!empty($sponsers_datas->sp_passport)): ?>
+                                                    <div style="margin-top:8px;">
+                                                        <a href="<?php echo base_url($sponsers_datas->sp_passport); ?>" target="_blank">
+                                                            <img src="<?php echo base_url($sponsers_datas->sp_passport); ?>" alt="Current guarantor passport" class="img-thumbnail" style="width:120px;height:120px;object-fit:cover;">
+                                                        </a>
+                                                    </div>
+                                                <?php endif; ?>
+                                        </div>
                                
                     
                 </div>
@@ -199,7 +220,8 @@
                             <h2><?php echo $this->lang->line("guarantorsinfo_menu"); ?></h2>
                         </div>
                         <div class="body">
-            <?php echo form_open("oficer/create_sponser/{$customer->customer_id}"); ?>
+            <?php if(@$sponser->customer_id != TRUE){ ?>
+            <?php echo form_open_multipart("oficer/create_sponser/{$customer->customer_id}"); ?>
                             <div class="row">
 
     <div class="col-lg-4 col-6">
@@ -228,6 +250,12 @@
       <span><?php echo $this->lang->line("relationship"); ?>:</span>  
         <input type="text" class="form-control" id="sp_relation" placeholder="<?php echo $this->lang->line("relationship"); ?>" name="sp_relation" autocomplete="off">
     </div>
+
+        <div class="col-lg-12 col-12">
+            <span>Guarantor Passport:</span>
+                                <input type="file" class="form-control sponsor-passport-input" id="sp_passport" name="sp_passport" accept="image/*" required>
+                                <input type="hidden" name="sp_passport_cropped" class="sp-passport-cropped" value="">
+        </div>
       </div>
     </div>
     <br>
@@ -243,6 +271,12 @@
     </div>
                             
                             <?php echo form_close();  ?>
+                            <?php }else{ ?>
+                                <div class="alert alert-info">Only one guarantor is allowed for this customer. Edit existing guarantor if needed.</div>
+                                <div class="text-center">
+                                    <a href="<?php echo base_url("oficer/loan_applicationForm/{$customer->customer_id}"); ?>" class="btn btn-primary"><?php echo $this->lang->line("skip_menu"); ?></a>
+                                </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div> 
@@ -254,6 +288,35 @@
             </div>
         </div>
    
+
+<div class="modal fade" id="sponserPassportCropModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Guarantor Passport</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-6 col-6">
+                            <img id="sponser-passport-crop-image" style="max-width:100%;">
+                        </div>
+                        <div class="col-md-6 col-6">
+                            <div class="preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="cropSponserPassportBtn">Crop</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -347,5 +410,75 @@ $('#empl').html('<option value="">Select Employee</option>');
 // });
 
 
+});
+</script>
+
+
+<script>
+$(function(){
+    var sponserCropModal = $('#sponserPassportCropModal');
+    var cropImage = document.getElementById('sponser-passport-crop-image');
+    var sponserCropper = null;
+    var activeInput = null;
+    var activeForm = null;
+
+    $('body').on('change', '.sponsor-passport-input', function(e){
+        var files = e.target.files;
+        if (!files || files.length === 0) {
+            return;
+        }
+
+        var file = files[0];
+        activeInput = $(this);
+        activeForm = activeInput.closest('form');
+
+        var done = function(url){
+            cropImage.src = url;
+            sponserCropModal.modal('show');
+        };
+
+        if (URL) {
+            done(URL.createObjectURL(file));
+        } else if (FileReader) {
+            var reader = new FileReader();
+            reader.onload = function(event){
+                done(event.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    sponserCropModal.on('shown.bs.modal', function(){
+        sponserCropper = new Cropper(cropImage, {
+            aspectRatio: 1,
+            viewMode: 2,
+            preview: '.preview'
+        });
+    }).on('hidden.bs.modal', function(){
+        if (sponserCropper) {
+            sponserCropper.destroy();
+            sponserCropper = null;
+        }
+    });
+
+    $('#cropSponserPassportBtn').click(function(){
+        if (!sponserCropper || !activeForm) {
+            return;
+        }
+
+        var canvas = sponserCropper.getCroppedCanvas({
+            width: 600,
+            height: 600
+        });
+
+        canvas.toBlob(function(blob){
+            var reader = new FileReader();
+            reader.onloadend = function(){
+                activeForm.find('.sp-passport-cropped').val(reader.result);
+                sponserCropModal.modal('hide');
+            };
+            reader.readAsDataURL(blob);
+        }, 'image/jpeg', 0.9);
+    });
 });
 </script>

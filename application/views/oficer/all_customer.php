@@ -43,7 +43,6 @@
                                             <th><?php echo $this->lang->line("gender_menu"); ?></th>
                                             <th><?php echo $this->lang->line("phone_number_menu"); ?></th>
                                             <!-- <th>Branch</th> -->
-                                            <th><?php echo $this->lang->line("district_menu"); ?></th>
                                             <th><?php echo $this->lang->line("ward_menu"); ?></th>
                                             <th><?php echo $this->lang->line("street_menu"); ?></th>
                                             <th><?php echo $this->lang->line("status_menu"); ?></th>
@@ -69,7 +68,6 @@
                                             <td><?php echo $customers->gender; ?></td>
                                             <td><?php echo $customers->phone_no; ?></td>
                                             <!-- <td><?php //echo $customers->blanch_name; ?></td> -->
-                                            <td><?php echo $customers->district; ?></td>
                                             <td><?php echo $customers->ward; ?></td>
                                             <td><?php echo $customers->street; ?></td>
                                             <td>

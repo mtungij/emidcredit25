@@ -208,6 +208,66 @@
             max-height: 40px;
             max-width: 160px;
         }
+
+        .passport-card {
+    position: relative;
+    width: 75px;
+    height: 75px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #dee2e6;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.passport-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.passport-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+/* Overlay */
+.passport-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 31, 68, 0.75); /* dark blue */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: 0.3s ease;
+}
+
+.passport-card:hover .passport-overlay {
+    opacity: 1;
+}
+
+.view-text {
+    color: #fff;
+    font-size: 12px;
+    padding: 6px 12px;
+    border: 1px solid #fff;
+    border-radius: 20px;
+}
+
+.card {
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
     }
 </style>
 </head>

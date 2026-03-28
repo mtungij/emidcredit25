@@ -56,7 +56,6 @@ class Welcome extends CI_Controller {
 	}
 
 
-
    // user sing in
 
 		public function signin(){

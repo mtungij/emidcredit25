@@ -33,23 +33,23 @@
                             <?php echo form_open("admin/create_employee") ?>
                             <div class="row">
                                 <div class="col-lg-3 form-group-sub">
-                                    <label class="form-control-label">*Full name:</label>
+                                    <label class="form-control-label">*Jina Kamili:</label>
                                 <input type="text" name="empl_name" placeholder="Full name" autocomplete="off" class="form-control" required>
                                 </div>
                                 <div class="col-lg-3 form-group-sub">
-                                    <label class="form-control-label">*Mobile no:</label>
-                                    <input type="number" name="empl_no" placeholder="Phone Number" autocomplete="off" class="form-control" required>
+                                    <label class="form-control-label">*Nambari ya Simu:</label>
+                                    <input type="number" name="empl_no" placeholder="Nambari ya Simu" autocomplete="off" class="form-control" required>
                                 </div>
                                 <div class="col-lg-3 form-group-sub">
-                                    <label class="form-control-label">*Email:</label>
-                                    <input type="email" name="empl_email" placeholder="Email" autocomplete="off" class="form-control input-sm" required>
+                                    <label class="form-control-label">*Barua Pepe:</label>
+                                    <input type="email" name="empl_email" placeholder="Barua Pepe" autocomplete="off" class="form-control input-sm" required>
                                 </div>
                                 <input type="hidden" name="comp_id" value="<?php echo $_SESSION['comp_id']; ?>">
                                 <input type="hidden" name="ac_status" value="empl">
                                 <div class="col-lg-3 form-group-sub">
-                                    <label  class="form-control-label">*Branch:</label>
+                                    <label  class="form-control-label">*Tawi:</label>
                             <select type="number" name="blanch_id" class="form-control select2" required class="form-control ">
-                                <option value="">Select Blanch</option>
+                                <option value="">Chagua Tawi</option>
                                 <?php foreach ($blanch as $blanchs): ?>
                                 <option value="<?php echo $blanchs->blanch_id; ?>"><?php echo $blanchs->blanch_name; ?></option>
                                 <?php endforeach; ?>
@@ -57,9 +57,9 @@
                                 </div>
 
                                 <div class="col-lg-3 form-group-sub">
-                                    <label  class="form-control-label">*Position:</label>
+                                    <label  class="form-control-label">*Cheo:</label>
                                 <select type="text" name="position_id" class="form-control select2" required>
-                                <option value="">Select Position</option>
+                                <option value="">Chagua Cheo</option>
                                 <?php foreach ($position as $positions): ?>
                                 <option value="<?php echo $positions->position_id; ?>"><?php echo $positions->position; ?></option>
                                 <?php endforeach; ?>
@@ -67,61 +67,39 @@
                                 </div>
                                 <!-- <input type="hidden" name="position_id" value="1">
  -->                                <div class="col-lg-3 form-group-sub">
-                                    <label  class="form-control-label">*Username:</label>
-                                <input type="text" name="username" placeholder="Username" autocomplete="off" class="form-control" required>
+                                    <label  class="form-control-label">*Jina la Mtumiaji:</label>
+                                <input type="text" name="username" placeholder="Jina la Mtumiaji" autocomplete="off" class="form-control" required>
                                 </div>
 
                                 <div class="col-lg-3 form-group-sub">
-                                    <label  class="form-control-label">*Sex:</label>
+                                    <label  class="form-control-label">*Jinsia:</label>
                                 <select type="text" name="empl_sex" class="form-control" data-required="true">
-                                <option value="">Select Sex</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="">Chagua Jinsia</option>
+                                <option value="male">Mwanaume</option>
+                                <option value="female">Mwanamke</option>
                              </select>
                                 </div>
-                                <div class="col-lg-3 form-group-sub">
-                                    <label  class="form-control-label">*Salary Amount:</label>
-                                <input type="number" name="salary" placeholder="Salary Amount" autocomplete="off" class="form-control input-sm" required>
-                                </div>
+                                <input type="hidden" name="salary" value="0">
 
+                                <input type="hidden" name="pays" value="no">
+                            <input type="hidden" name="pay_nssf" value="no">
+                            <input type="hidden" name="bank_account" value="CASH">
+                                <input type="hidden" name="account_no" value="0">
                                 <div class="col-lg-3 form-group-sub">
-                                    <label  class="form-control-label">*Payee:</label>
-                                <select type="text" name="pays" class="form-control" required>
-                                <option value="">Select</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
+                                    <label class="form-control-label">*Password:</label>
+                                    <input type="password" name="password" id="password" minlength="6" placeholder="Password" autocomplete="new-password" class="form-control" required>
+                                    <small id="password_status" class="text-muted"></small>
                                 </div>
-                            <div class="col-lg-3 form-group-sub">
-                                    <label  class="form-control-label">*Pay NSSF:</label>
-                            <select type="text" name="pay_nssf" class="form-control" required>
-                                <option value="">Select</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
+                                <div class="col-lg-3 form-group-sub">
+                                    <label class="form-control-label">*Confirm Password:</label>
+                                    <input type="password" name="confirm_password" id="confirm_password" minlength="6" placeholder="Confirm Password" autocomplete="new-password" class="form-control" required>
+                                    <small id="confirm_status" class="text-muted"></small>
                                 </div>
-                                    <div class="col-lg-3 form-group-sub">
-                                    <label  class="form-control-label">*Account:</label>
-                                <select type="text" name="bank_account" class="form-control" required>
-                                <option value="">Select</option>
-                                <option value="NMB">NMB</option>
-                                <option value="CRDB">CRDB</option>
-                                <option value="TPB">TPB</option>
-                                <option value="NBC">NBC</option>
-                                <option value="EQTY">EQTY</option>
-                                <option value="CASH">CASH</option>
-                            </select>
-                                </div>
-                                    <div class="col-lg-3 form-group-sub">
-                                    <label  class="form-control-label">*Account Number:</label>
-                            <input type="text" name="account_no" placeholder="Account Number" autocomplete="off" class="form-control">
-                                </div>
-                        <input type="hidden" name="password" value="1234">
                                 <br>
                                 </div>
                             </div>
                                 <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="icon-drawer">Save</i></button>
+                                <button type="submit" class="btn btn-primary"><i class="icon-drawer">Hifadhi</i></button>
                                 </div>
                             
                             <?php echo form_close();  ?>
@@ -135,5 +113,60 @@
 </div>
 
 <?php include('incs/footer.php'); ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var form = document.querySelector('form');
+    var password = document.getElementById('password');
+    var confirmPassword = document.getElementById('confirm_password');
+    var passwordStatus = document.getElementById('password_status');
+    var confirmStatus = document.getElementById('confirm_status');
+
+    if (!form || !password || !confirmPassword || !passwordStatus || !confirmStatus) {
+        return;
+    }
+
+    function validatePasswordStatus() {
+        var passLen = password.value.length;
+        if (passLen < 6) {
+            passwordStatus.textContent = 'Idadi ya herufi: ' + passLen + ' (angalau 6)';
+            passwordStatus.className = 'text-danger';
+        } else {
+            passwordStatus.textContent = 'Idadi ya herufi: ' + passLen + ' (Sawa)';
+            passwordStatus.className = 'text-success';
+        }
+    }
+
+    function validatePasswordMatch() {
+        if (confirmPassword.value.length === 0) {
+            confirmStatus.textContent = '';
+            confirmPassword.setCustomValidity('');
+            return;
+        }
+
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.setCustomValidity('Nenosiri halifanani');
+            confirmStatus.textContent = 'Hali: Nenosiri halifanani';
+            confirmStatus.className = 'text-danger';
+        } else {
+            confirmPassword.setCustomValidity('');
+            confirmStatus.textContent = 'Hali: Nenosiri linafanana';
+            confirmStatus.className = 'text-success';
+        }
+    }
+
+    password.addEventListener('input', function () {
+        validatePasswordStatus();
+        validatePasswordMatch();
+    });
+    confirmPassword.addEventListener('input', validatePasswordMatch);
+    form.addEventListener('submit', function () {
+        validatePasswordStatus();
+        validatePasswordMatch();
+    });
+
+    validatePasswordStatus();
+});
+</script>
 
 

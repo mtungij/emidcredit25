@@ -162,10 +162,7 @@
 </select>
     </div> -->
     <input type="hidden" name="region_id" value="1">
-        <div class="col-lg-4 col-6">
-        <span>District:</span>
-<input type="text" name="district" value="<?php echo $customer_profile->district; ?>" placeholder="district" autocomplete="off" class="form-control input-sm" required>
-    </div>
+    <input type="hidden" name="district" value="<?php echo $customer_profile->district; ?>">
         <div class="col-lg-4 col-6">
         <span>Ward:</span>
 <input type="text" name="ward" value="<?php echo $customer_profile->ward; ?>" placeholder="Ward" autocomplete="off" class="form-control input-sm" required>

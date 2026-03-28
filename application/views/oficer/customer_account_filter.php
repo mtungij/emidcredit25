@@ -90,7 +90,6 @@
                                         <tr>
                                         <th>Customer Name</th>
                                         <th>Phone Number</th>
-                                        <th>District</th>
                                         <th>Ward</th>
                                         <th>Street</th>
                                         </tr>
@@ -110,8 +109,6 @@
                                         <tr>
                                             <td><?php echo @$customer->f_name; ?> <?php echo @$customer->m_name; ?> <?php echo @$customer->l_name; ?></td>
                                             <td><?php echo @$customer->phone_no; ?></td> 
-                                                
-                                            <td><?php echo @$customer->district; ?></td>
                                             <td><?php echo @$customer->ward; ?></td>
                                             <td><?php echo @$customer->street; ?></td>
                                         
