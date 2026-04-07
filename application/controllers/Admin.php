@@ -3272,7 +3272,7 @@ public function create_withdrow_balance($customer_id){
 		  $comp_id = $data['comp_id'];
 		  $description = $data['description'];
 		  $method = $data['method'];
-		  // $new_code = $data['code'];
+		   $new_code = $data['code'];
 		  $with_date = $data['with_date'];
 		  $loan_status = 'withdrawal';
 		  $new_balance = $withdrow_newbalance;
