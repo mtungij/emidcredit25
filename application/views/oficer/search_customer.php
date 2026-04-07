@@ -78,7 +78,7 @@
                         <div class="body text-center p-3">
                             <h6 class="mb-2">Sponsor Details</h6>
                             <div class="profile-image mb-2">
-                                <img src="<?php echo !empty($sponser->sp_passport) ? base_url($sponser->sp_passport) : base_url().'assets/img/male.jpeg'; ?>" class="rounded-circle img-thumbnail" alt="Sponsor passport" style="width: 110px;height: 110px;object-fit:cover;">
+                                <img src="<?php echo !empty($sponser->sp_passport) ? base_url($sponser->sp_passport) : base_url().'assets/img/male.jpeg'; ?>" class="rounded-circle img-thumbnail sponsor-details-passport-preview" alt="Sponsor passport" style="width: 110px;height: 110px;object-fit:cover;">
                             </div>
                             <?php if (!empty($sponser->customer_id)): ?>
                                 <p class="mb-1"><small class="text-muted d-block">Full Name</small><strong><?php echo $sponser->sp_name; ?> <?php echo $sponser->sp_mname; ?> <?php echo $sponser->sp_lname; ?></strong></p>
@@ -170,16 +170,13 @@
                     </div>
                                         <div class="col-lg-12 col-12">
                                             <span>Guarantor Passport:</span>
-                                                <input type="file" class="form-control sponsor-passport-input" name="sp_passport" accept="image/*">
+                                                <input type="file" class="form-control sponsor-passport-input" name="sp_passport" accept="image/*" capture="environment">
+                                                <small class="text-danger passport-crop-error" style="display:none;">Please crop guarantor passport before submitting.</small>
                                                 <input type="hidden" name="sp_passport_cropped" class="sp-passport-cropped" value="">
                                                 <input type="hidden" name="old_sp_passport" value="<?php echo $sponsers_datas->sp_passport; ?>">
-                                                <?php if (!empty($sponsers_datas->sp_passport)): ?>
-                                                    <div style="margin-top:8px;">
-                                                        <a href="<?php echo base_url($sponsers_datas->sp_passport); ?>" target="_blank">
-                                                            <img src="<?php echo base_url($sponsers_datas->sp_passport); ?>" alt="Current guarantor passport" class="img-thumbnail" style="width:120px;height:120px;object-fit:cover;">
-                                                        </a>
-                                                    </div>
-                                                <?php endif; ?>
+                                                <div style="margin-top:8px;">
+                                                    <img src="<?php echo !empty($sponsers_datas->sp_passport) ? base_url($sponsers_datas->sp_passport) : base_url().'assets/img/male.jpeg'; ?>" alt="Current guarantor passport" class="img-thumbnail sponsor-passport-input-preview" style="width:120px;height:120px;object-fit:cover;">
+                                                </div>
                                         </div>
                                
                     
@@ -249,16 +246,13 @@
 
         <div class="col-lg-12 col-12">
             <span>Guarantor Passport:</span>
-                                <input type="file" class="form-control sponsor-passport-input" id="sp_passport" name="sp_passport" accept="image/*" <?php echo (@$sponser->customer_id == TRUE ? '' : 'required'); ?>>
+                                <input type="file" class="form-control sponsor-passport-input" id="sp_passport" name="sp_passport" accept="image/*" capture="environment" <?php echo (@$sponser->customer_id == TRUE ? '' : 'required'); ?>>
+                                <small class="text-danger passport-crop-error" style="display:none;">Please crop guarantor passport before submitting.</small>
                                 <input type="hidden" name="sp_passport_cropped" class="sp-passport-cropped" value="">
                                 <input type="hidden" name="old_sp_passport" value="<?php echo @$sponser->sp_passport; ?>">
-                                <?php if (!empty($sponser->sp_passport)): ?>
-                                    <div style="margin-top:8px;">
-                                        <a href="<?php echo base_url($sponser->sp_passport); ?>" target="_blank">
-                                            <img src="<?php echo base_url($sponser->sp_passport); ?>" alt="Current guarantor passport" class="img-thumbnail" style="width:120px;height:120px;object-fit:cover;">
-                                        </a>
-                                    </div>
-                                <?php endif; ?>
+                                <div style="margin-top:8px;">
+                                    <img src="<?php echo !empty($sponser->sp_passport) ? base_url($sponser->sp_passport) : base_url().'assets/img/male.jpeg'; ?>" alt="Current guarantor passport" class="img-thumbnail sponsor-passport-input-preview" style="width:120px;height:120px;object-fit:cover;">
+                                </div>
         </div>
       </div>
     </div>
@@ -266,12 +260,6 @@
 
     <div class="text-center">
         <button type="submit" class="btn btn-primary"><i class="icon-drawer"><?php echo (@$sponser->customer_id == TRUE ? $this->lang->line("update_menu") : $this->lang->line("save_menu")); ?></i></button>
-     <?php if (@$data_loan_desc->loan_status == 'open' || @$data_loan_desc->loan_status == 'reject' || @$data_loan_desc->loan_status == 'out' || @$data_loan_desc->loan_status == 'withdrawal') {
-      ?>
-   <a href="<?php echo base_url("oficer/loan_applicationForm/{$customer->customer_id}"); ?>" class="btn btn-primary"><?php echo $this->lang->line("skip_menu"); ?></a>
-  <?php }else{ ?>
-    <a href="<?php echo base_url("oficer/loan_applicationForm/{$customer->customer_id}"); ?>" class="btn btn-primary"><?php echo $this->lang->line("skip_menu"); ?></a>
-    <?php } ?>
     </div>
                             
                             <?php echo form_close();  ?>
@@ -292,9 +280,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Crop Guarantor Passport</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body">
                 <div class="img-container">
@@ -342,6 +327,7 @@ $(function(){
     var sponserCropper = null;
     var activeInput = null;
     var activeForm = null;
+    var cropApplied = false;
 
     $('body').on('change', '.sponsor-passport-input', function(e){
         var files = e.target.files;
@@ -352,9 +338,16 @@ $(function(){
         var file = files[0];
         activeInput = $(this);
         activeForm = activeInput.closest('form');
+        cropApplied = false;
+        activeForm.find('.sp-passport-cropped').val('');
+        activeForm.find('.passport-crop-error').hide();
 
         var done = function(url){
             cropImage.src = url;
+            sponserCropModal.modal({
+                backdrop: 'static',
+                keyboard: false
+            });
             sponserCropModal.modal('show');
         };
 
@@ -376,6 +369,12 @@ $(function(){
             preview: '.preview'
         });
     }).on('hidden.bs.modal', function(){
+        if (activeInput && !cropApplied) {
+            activeInput.val('');
+            if (activeForm) {
+                activeForm.find('.sp-passport-cropped').val('');
+            }
+        }
         if (sponserCropper) {
             sponserCropper.destroy();
             sponserCropper = null;
@@ -395,11 +394,36 @@ $(function(){
         canvas.toBlob(function(blob){
             var reader = new FileReader();
             reader.onloadend = function(){
-                activeForm.find('.sp-passport-cropped').val(reader.result);
+                var croppedImage = reader.result;
+                activeForm.find('.sp-passport-cropped').val(croppedImage);
+                activeForm.find('.sponsor-passport-input-preview').attr('src', croppedImage);
+                $('.sponsor-details-passport-preview').attr('src', croppedImage);
+                activeForm.find('.passport-crop-error').hide();
+                cropApplied = true;
                 sponserCropModal.modal('hide');
             };
             reader.readAsDataURL(blob);
         }, 'image/jpeg', 0.9);
+    });
+
+    $('body').on('submit', 'form', function(e){
+        var form = $(this);
+        var input = form.find('.sponsor-passport-input');
+        if (input.length === 0) {
+            return;
+        }
+
+        var inputEl = input.get(0);
+        var hasSelectedFile = inputEl && inputEl.files && inputEl.files.length > 0;
+        var hasCroppedImage = form.find('.sp-passport-cropped').val() !== '';
+
+        if (hasSelectedFile && !hasCroppedImage) {
+            e.preventDefault();
+            form.find('.passport-crop-error').show();
+            input.trigger('change');
+        } else {
+            form.find('.passport-crop-error').hide();
+        }
     });
 });
 </script>

@@ -67,10 +67,10 @@
                         <div class="d-flex flex-column align-items-center text-center">
                             <?php if (@$customer->passport): ?>
                                 <img src="<?php echo base_url() . $customer->passport; ?>" alt="Customer"
-                                    class="rounded-circle p-1 bg-primary" width="70">
+                                    class="rounded-circle p-1 bg-primary" width="130" height="130" style="object-fit:cover;">
                             <?php else: ?>
                                 <img src="<?php echo base_url() . 'assets/img/male.jpeg'; ?>" alt="Customer"
-                                    class="rounded-circle p-1 bg-primary" width="70">
+                                    class="rounded-circle p-1 bg-primary" width="130" height="130" style="object-fit:cover;">
                             <?php endif; ?>
                             <div class="mt-2">
                                 <h6 class="mb-0"><?php echo strtoupper(@$customer->f_name . ' ' . @$customer->m_name . ' ' . @$customer->l_name); ?></h6>
@@ -333,23 +333,17 @@
                 <div class="card h-100">
                     <div class="card-body p-3">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <div class="rounded-circle p-1 bg-warning d-flex align-items-center justify-content-center"
-                                style="width:70px;height:70px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24"
-                                    fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                </svg>
-                            </div>
+                            <?php
+                            $sponsor_image = base_url() . 'assets/img/male.jpeg';
+                            if (!empty($sponsors) && !empty($sponsors[0]['sp_passport'])) {
+                                $sponsor_image = base_url() . $sponsors[0]['sp_passport'];
+                            }
+                            ?>
+                            <img src="<?php echo $sponsor_image; ?>" alt="Sponsor Passport"
+                                class="rounded-circle p-1 bg-warning" width="130" height="130"
+                                style="object-fit:cover;">
                             <div class="mt-2">
-                                <h6 class="mb-0">Guarantors / Sponsors</h6>
-                                <small class="text-secondary">Loan Reference Contacts</small><br>
-                                <small class="text-muted">
-                                    <?php echo !empty($sponsors) ? count($sponsors) . ' Guarantor(s) on record' : 'No guarantors'; ?>
-                                </small>
+                                <h6 class="mb-0"></h6>
                             </div>
                         </div>
                         <hr class="my-2">

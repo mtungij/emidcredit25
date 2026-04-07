@@ -57,15 +57,20 @@
                             <div class="col-lg-6 col-6">
                                 <div class="body">
                                    <!--  <i class="fa fa-star"></i> -->
-                                   <?php if ($local_oficer->cont_attachment == TRUE) {
-                                     ?>
-                                <div class="profile-image"> <img src="<?php echo base_url().$local_oficer->cont_attachment; ?>" class="rounded-circle" alt="customer image" style="width: 130px;height: 130px;">
+                                   <?php
+                                   $sponsor_passport = '';
+                                   if (!empty($sponser_detail)) {
+                                       foreach ($sponser_detail as $sponsor_item) {
+                                           if (!empty($sponsor_item->sp_passport)) {
+                                               $sponsor_passport = $sponsor_item->sp_passport;
+                                               break;
+                                           }
+                                       }
+                                   }
+                                   ?>
+                                <div class="profile-image"> <img src="<?php echo !empty($sponsor_passport) ? base_url().$sponsor_passport : base_url().'assets/img/male.jpeg'; ?>" class="rounded-circle" alt="sponsor passport" style="width: 130px;height: 130px;">
                                       </div>
-                                 <?php }else{ ?>
-                                <div class="profile-image"> <img src="<?php echo base_url().'assets/img/male.jpeg'; ?>" class="rounded-circle" alt="customer image" style="width: 130px;height: 130px;">
-                                      </div>
-                                    <?php } ?>
-                                    <small>Loan Passport</small>
+                                    <small>Sponsor Passport</small>
                                 </div>
                             </div>
                            
