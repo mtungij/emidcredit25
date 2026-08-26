@@ -1739,10 +1739,10 @@ $this->load->view('admin/search_customer',['customer'=>$customer,'sponser'=>$spo
      $company_name = $compdata->comp_name;
      //$full_name = $custm_data->f_name . ' ' . $custm_data->m_name . ' ' . $custm_data->l_name ;
      $phone = $custm_data->phone_no; 
-     $massage = $loan_verfication .' ' .'Msimbo wa Uthibitisho' .' '. $company_name;
-     // print_r($massage);
+     $message = $loan_verfication .' ' .'Msimbo wa Uthibitisho' .' '. $company_name;
+     // print_r($message);
      //         exit(); 
-     $this->sendsms($phone,$massage);
+     $this->sendsms($phone,$message);
      
       
       $this->load->view('admin/loan_verfication',['customer_id'=>$customer_id]);
@@ -2205,10 +2205,10 @@ $this->load->view('admin/search_customer',['customer'=>$customer,'sponser'=>$spo
             // print_r($data);
             //  echo "</pre>";
             //   exit();
-            $massage = "Mpendwa $first_name $m_name $l_name, mkopo wako uliopitishwa kutoka $company_name ni Tsh $amount. Namba yako ya uthibitisho kwa ajili ya kupokea mkopo ni: $approval_code";
+            $message = "Mpendwa $first_name $m_name $l_name, mkopo wako uliopitishwa kutoka $company_name ni Tsh $amount. Namba yako ya uthibitisho kwa ajili ya kupokea mkopo ni: $approval_code";
         
        
-           $this->sendsms($phone, $massage);
+           $this->sendsms($phone, $message);
             //Pass user data to model
             $this->load->model('queries'); 
             $data = $this->queries->update_status($loan_id,$data);
@@ -2222,15 +2222,15 @@ $this->load->view('admin/search_customer',['customer'=>$customer,'sponser'=>$spo
             if($data){
 
              
-              $massage = "Mpendwa $first_name $m_name $l_name, mkopo wako uliokubaliwa ni Tsh $amount. Namba yako ya uthibitisho kwa ajili ya kupokea mkopo ni: $approval_code. Asante!";
+              $message = "Mpendwa $first_name $m_name $l_name, mkopo wako uliokubaliwa ni Tsh $amount. Namba yako ya uthibitisho kwa ajili ya kupokea mkopo ni: $approval_code. Asante!";
         
             //    echo "<pre>";
-            // print_r($massage);
+            // print_r($message);
             //  echo "</pre>";
             //   exit();
             //Storing in
               // Call SMS function
-              $this->send_sms($phone, $massage);
+              $this->send_sms($phone, $message);
             	
                 $this->session->set_flashdata('massage','Loan Approved successfully');
             }else{
@@ -2491,7 +2491,7 @@ public function disburse($loan_id){
         
      
       // $sms = 'Taasisi ya '.$comp_name.' Imeingiza Mkopo Kiasi cha Tsh.'.$remain_balance.' kwenye Acc Yako ' . $loan_codeID .' Namba yasiri ya kutolea mkopo ni '.$code;
-      // $massage = $sms;
+      // $message = $sms;
       // $phone = $phones;
 
       $loan_fee_type = $this->queries->get_loanfee_type($comp_id);
@@ -2541,7 +2541,7 @@ public function disburse($loan_id){
 
            $this->insert_loan_lecord($comp_id,$customer_id,$loan_id,$blanch_id,$total_loan,$loan_interest,$group_id);
            $this->update_loaninterest($pay_id,$total_loan);
-           //$this->sendsms($phone,$massage);
+           //$this->sendsms($phone,$message);
            $this->aprove_disbas_status($loan_id);
            
           return redirect('admin/get_loan_aproved');      
@@ -2680,10 +2680,10 @@ public function disburse($loan_id){
             //  echo "</pre>";
             //   exit();
            //send sms function
-           $massage ='Ndugu,'.' '.$full_name .' '.'Tunapenda Kukutaarifu Kuwa Mkopo wako Wa Tsh.'.number_format($loan_aproved) . ' '.'Umepitishwa'. ' '. $comp_name.' '.' Inakujari Mteja';
+           $message ='Ndugu,'.' '.$full_name .' '.'Tunapenda Kukutaarifu Kuwa Mkopo wako Wa Tsh.'.number_format($loan_aproved) . ' '.'Umepitishwa'. ' '. $comp_name.' '.' Inakujari Mteja';
            
            
-               // print_r($massage);
+               // print_r($message);
                //     exit();
             //Pass user data to model
            $this->load->model('queries'); 
@@ -2692,7 +2692,7 @@ public function disburse($loan_id){
             //Storing insertion status message.
             if($data){
             	
-            	$this->sendsms($phone,$massage);
+            	$this->sendsms($phone,$message);
                 $this->session->set_flashdata('massage','Loan disbarsed successfully');
             }else{
                 $this->session->set_flashdata('error','Data failed!!');
@@ -3137,10 +3137,10 @@ public function disburse($loan_id){
 	  $phone = $loan_datas->phone_no;
 
            //send sms function
-           $massage = $comp_name.' Imeingiza Mkopo Kiasi cha Tsh.'.$loan_aproved.' kwenye Acc Yako ' . $loan_codeID .' Kwa msaada zaidi Piga simu Namba '.$comp_phone;
+           $message = $comp_name.' Imeingiza Mkopo Kiasi cha Tsh.'.$loan_aproved.' kwenye Acc Yako ' . $loan_codeID .' Kwa msaada zaidi Piga simu Namba '.$comp_phone;
         
         
-               // print_r($massage);
+               // print_r($message);
                //     exit();
             //Pass user data to model
            $this->load->model('queries'); 
@@ -3156,7 +3156,7 @@ public function disburse($loan_id){
           	 $sms_number = 1;
              $this->insert_count_sms($comp_id,$sms_number);
              }
-            	$this->sendsms($phone,$massage);
+            	$this->sendsms($phone,$message);
                 $this->session->set_flashdata('massage','Loan disbarsed successfully');
             }else{
                 $this->session->set_flashdata('error','Data failed!!');
@@ -3367,7 +3367,7 @@ public function create_withdrow_balance($customer_id){
           $remain_balance = $balance;
           $today = date("Y-m-d H:i");
 
-          $massage = 'Umepokea Tsh. ' . number_format($remain_balance) . ' kutoka kwa ' . $comp_name . '. Tarehe: ' . $today . '. Tunakutakia urejeshaji mzuri wa mkopo wako.';
+          $message = 'Umepokea Tsh. ' . number_format($remain_balance) . ' kutoka kwa ' . $comp_name . '. Tarehe: ' . $today . '. Tunakutakia urejeshaji mzuri wa mkopo wako.';
 
          
        
@@ -3407,7 +3407,7 @@ public function create_withdrow_balance($customer_id){
 	          $this->insert_startLoan_date($comp_id,$loan_id,$blanch_id,$end_date,$customer_id,$with_date);
               $this->update_customer_status($customer_id);
               if($company_data->sms_status == 'YES'){
-              	 $this->sendsms($phone,$massage);
+              	 $this->sendsms($phone,$message);
               }elseif ($company_data->sms_status == 'NO'){
               	 //echo "hakuna kitu";
               }
@@ -3886,32 +3886,32 @@ $days_remain = $this->queries->get_loan_active_customer($customer_id);
    
    if ($remain_days == 0) {
        // // Mteja amelipa siku ya mwisho ya mkataba
-       // $massage = 'Mpendwa '.$full_name.', tumepokea malipo yako ya Mbele ya TZS '.number_format($new_balance).
+       // $message = 'Mpendwa '.$full_name.', tumepokea malipo yako ya Mbele ya TZS '.number_format($new_balance).
        // '. Deni lako lililobaki kufikia leo tarehe '.$date.' ni TZS '.number_format($remain_loan).
        // '. Leo ni siku ya mwisho wa mkataba wako - '.$comp_name.'.';
 
       
-       $massage = 'Ndugu '.$full_name.', umelipa TSH '.number_format($new_balance).' leo '.$date.' - '.$comp_name.'. Mpokeaji: '.$role.'. Deni: TSH '.number_format($remain_loan).'. Leo ni mwisho wa mkataba wako.';
+       $message = 'Ndugu '.$full_name.', umelipa TSH '.number_format($new_balance).' leo '.$date.' - '.$comp_name.'. Mpokeaji: '.$role.'. Deni: TSH '.number_format($remain_loan).'. Leo ni mwisho wa mkataba wako.';
 
      
 
    } elseif ($remain_days > 0) {
        // Mteja amelipa kabla ya mkataba kuisha
-       // $massage = 'Mpendwa '.$full_name.', tumepokea malipo yako ya TZS '.number_format($new_balance).
+       // $message = 'Mpendwa '.$full_name.', tumepokea malipo yako ya TZS '.number_format($new_balance).
        // ' tarehe '.$date.'. Deni lako lililobaki kufikia leo ni TZS '.number_format($remain_loan).'. '.
        // 'Umebakiwa na siku '.$remain_days.' kabla ya mkataba kuisha tarehe '.date("d/m/Y", strtotime($siku_baki)).'. '.
        // 'Asante kwa kufanya malipo - '.$comp_name.'.';
-       $massage = 'Ndugu ' . $full_name . ' ' . $middle_name . ' ' . $last_name . ', umelipa TSH ' . number_format($new_balance) . ' leo tarehe ' . $date . ' - ' . $comp_name . '. Mpokeaji: ' . $role . '. Deni ni TSH ' . number_format($remain_loan) . '.';
+       $message = 'Ndugu ' . $full_name . ' ' . $middle_name . ' ' . $last_name . ', umelipa TSH ' . number_format($new_balance) . ' leo tarehe ' . $date . ' - ' . $comp_name . '. Mpokeaji: ' . $role . '. Deni ni TSH ' . number_format($remain_loan) . '.';
 
 
 
    } else {
        // Mdaiwa sugu - amelipa baada ya tarehe ya mwisho ya mkataba
-       // $massage = 'Mpendwa '.$full_name.', malipo yako ya TZS '.number_format($new_balance).
+       // $message = 'Mpendwa '.$full_name.', malipo yako ya TZS '.number_format($new_balance).
        // ' yamepokelewa tarehe '.$date.'. Tafadhali fahamu kuwa umechelewa kulipa na sasa unahesabika kama mdaiwa sugu. '.
        // 'Deni lako lililobaki ni TZS '.number_format($remain_loan).'. Tafadhali lipa haraka ili kuepuka hatua zaidi. - '.$comp_name.'.';
 
-       $massage = 'Ndugu '.$full_name.' ' .$middle_name .' ' . $last_name.', umelipa TSH '.number_format($new_balance).' leo '.$date.'. Mpokeaji: '.$role.'. Deni: TZS '.number_format($remain_loan).'. Malipo yamechelewa, lipa haraka kuepuka hatua zaidi.';
+       $message = 'Ndugu '.$full_name.' ' .$middle_name .' ' . $last_name.', umelipa TSH '.number_format($new_balance).' leo '.$date.'. Mpokeaji: '.$role.'. Deni: TZS '.number_format($remain_loan).'. Malipo yamechelewa, lipa haraka kuepuka hatua zaidi.';
 
 
       
@@ -3922,7 +3922,7 @@ $days_remain = $this->queries->get_loan_active_customer($customer_id);
 
    //    //sms send
    // $sms = 'Umeingiza Tsh.' .$new_balance. ' kwenye Acc Yako ' . $loan_codeID . $comp_name.' Mpokeaji '.$role . ' Kiasi kilicho baki Kulipwa ni Tsh.'.$remain_loan.' Kwa malalamiko piga '.$comp_phone;
-   // $massage = $sms;
+   // $message = $sms;
    // $phone = $phones;
 
 // print_r($deni_lipa);
@@ -3952,7 +3952,7 @@ $days_remain = $this->queries->get_loan_active_customer($customer_id);
             //      exit();
           if ($company_data->sms_status == 'YES'){
           	 
-             $this->sendsms($phone,$massage);
+             $this->sendsms($phone,$message);
              //echo "kitu kipo";
           }elseif($company_data->sms_status == 'NO'){
           	 //echo "Hakuna kitu hapa";
@@ -4025,30 +4025,30 @@ $days_remain = $this->queries->get_loan_active_customer($customer_id);
           
           if ($remain_days == 0) {
               // // Mteja amelipa siku ya mwisho ya mkataba
-              // $massage = 'Mpendwa '.$full_name.', tumepokea malipo yako ya Mbele ya TZS '.number_format($new_balance).
+              // $message = 'Mpendwa '.$full_name.', tumepokea malipo yako ya Mbele ya TZS '.number_format($new_balance).
               // '. Deni lako lililobaki kufikia leo tarehe '.$date.' ni TZS '.number_format($remain_loan).
               // '. Leo ni siku ya mwisho wa mkataba wako - '.$comp_name.'.';
 
-              $massage = 'Ndugu '.$full_name.', malipo yako ya '.number_format($new_balance).' yamepokelewa '.$date.'. Deni lako ni '.number_format($remain_loan).'. tarehe ya Leo ni siku ya mwisho wa mkataba wako - '.$comp_name.'.';
+              $message = 'Ndugu '.$full_name.', malipo yako ya '.number_format($new_balance).' yamepokelewa '.$date.'. Deni lako ni '.number_format($remain_loan).'. tarehe ya Leo ni siku ya mwisho wa mkataba wako - '.$comp_name.'.';
             
 
           } elseif ($remain_days > 0) {
               // Mteja amelipa kabla ya mkataba kuisha
-              // $massage = 'Mpendwa '.$full_name.', tumepokea malipo yako ya TZS '.number_format($new_balance).
+              // $message = 'Mpendwa '.$full_name.', tumepokea malipo yako ya TZS '.number_format($new_balance).
               // ' tarehe '.$date.'. Deni lako lililobaki kufikia leo ni TZS '.number_format($remain_loan).'. '.
               // 'Umebakiwa na siku '.$remain_days.' kabla ya mkataba kuisha tarehe '.date("d/m/Y", strtotime($siku_baki)).'. '.
               // 'Asante kwa kufanya malipo - '.$comp_name.'.';
 
-              $massage = 'Ndugu '.$full_name.', umelipa TSH '.number_format($new_balance).' leo tarehe '.$date.' - '.$comp_name.'. Mpokeaji: '.$role.'. Deni ni TSH '.number_format($remain_loan).'.';
+              $message = 'Ndugu '.$full_name.', umelipa TSH '.number_format($new_balance).' leo tarehe '.$date.' - '.$comp_name.'. Mpokeaji: '.$role.'. Deni ni TSH '.number_format($remain_loan).'.';
 
 
           } else {
               // Mdaiwa sugu - amelipa baada ya tarehe ya mwisho ya mkataba
-              // $massage = 'Mpendwa '.$full_name.', malipo yako ya TZS '.number_format($new_balance).
+              // $message = 'Mpendwa '.$full_name.', malipo yako ya TZS '.number_format($new_balance).
               // ' yamepokelewa tarehe '.$date.'. Tafadhali fahamu kuwa umechelewa kulipa na sasa unahesabika kama mdaiwa sugu. '.
               // 'Deni lako lililobaki ni TZS '.number_format($remain_loan).'. Tafadhali lipa haraka ili kuepuka hatua zaidi. - '.$comp_name.'.';
 
-              $massage = 'Ndugu ' .$full_name.', TZS '.number_format($new_balance).' zimepokelewa tarehe'.$date.'. Umechelewa kulipa, deni lako ni TZS '.number_format($remain_loan).'. Lipa haraka kuepuka hatua zaidi. - '.$comp_name.'.';
+              $message = 'Ndugu ' .$full_name.', TZS '.number_format($new_balance).' zimepokelewa tarehe'.$date.'. Umechelewa kulipa, deni lako ni TZS '.number_format($remain_loan).'. Lipa haraka kuepuka hatua zaidi. - '.$comp_name.'.';
              
 
           }
@@ -4057,7 +4057,7 @@ $days_remain = $this->queries->get_loan_active_customer($customer_id);
 
           //    //sms send
           // $sms = 'Umeingiza Tsh.' .$new_balance. ' kwenye Acc Yako ' . $loan_codeID . $comp_name.' Mpokeaji '.$role . ' Kiasi kilicho baki Kulipwa ni Tsh.'.$remain_loan.' Kwa malalamiko piga '.$comp_phone;
-          // $massage = $sms;
+          // $message = $sms;
           // $phone = $phones;
 
 	     // print_r($deni_lipa);
@@ -4088,7 +4088,7 @@ $days_remain = $this->queries->get_loan_active_customer($customer_id);
             //      exit();
           if ($company_data->sms_status == 'YES'){
           	 
-             $this->sendsms($phone,$massage);
+             $this->sendsms($phone,$message);
              //echo "kitu kipo";
           }elseif($company_data->sms_status == 'NO'){
           	 //echo "Hakuna kitu hapa";
@@ -4197,17 +4197,17 @@ $days_remain = $this->queries->get_loan_active_customer($customer_id);
              
              if ($remain_days == 0) {
                  // // Mteja amelipa siku ya mwisho ya mkataba
-                 // $massage = 'Mpendwa '.$full_name.', tumepokea malipo yako ya Mbele ya TZS '.number_format($new_balance).
+                 // $message = 'Mpendwa '.$full_name.', tumepokea malipo yako ya Mbele ya TZS '.number_format($new_balance).
                  // '. Deni lako lililobaki kufikia leo tarehe '.$date.' ni TZS '.number_format($remain_loan).
                  // '. Leo ni siku ya mwisho wa mkataba wako - '.$comp_name.'.';
    
-                 $massage = 'Ndugu '.$full_name.', malipo yako ya '.number_format($new_balance).' yamepokelewa '.$date.'. Mpokeaji: '.$role.'. Deni lako ni '.number_format($remain_loan).'. Tarehe ya leo ni siku ya mwisho wa mkataba wako - '.$comp_name.'.';
+                 $message = 'Ndugu '.$full_name.', malipo yako ya '.number_format($new_balance).' yamepokelewa '.$date.'. Mpokeaji: '.$role.'. Deni lako ni '.number_format($remain_loan).'. Tarehe ya leo ni siku ya mwisho wa mkataba wako - '.$comp_name.'.';
 
                
    
              } elseif ($remain_days > 0) {
                  // Mteja amelipa kabla ya mkataba kuisha
-                 // $massage = 'Mpendwa '.$full_name.', tumepokea malipo yako ya TZS '.number_format($new_balance).
+                 // $message = 'Mpendwa '.$full_name.', tumepokea malipo yako ya TZS '.number_format($new_balance).
                  // ' tarehe '.$date.'. Deni lako lililobaki kufikia leo ni TZS '.number_format($remain_loan).'. '.
                  // 'Umebakiwa na siku '.$remain_days.' kabla ya mkataba kuisha tarehe '.date("d/m/Y", strtotime($siku_baki)).'. '.
                  // 'Asante kwa kufanya malipo - '.$comp_name.'.';
@@ -4216,17 +4216,17 @@ $full_name = ucwords(strtolower($full_name));
 $middle_name = ucwords(strtolower($middle_name));
 $last_name = ucwords(strtolower($last_name));
 
-$massage = 'Ndugu ' . $full_name . ' ' . $middle_name . ' ' . $last_name . ', umelipa TSH ' . number_format($new_balance) . ' leo tarehe ' . $date . ' - ' . $comp_name . '. Mpokeaji: ' . $role . '. Deni ni TSH ' . number_format($remain_loan) . '.';
+$message = 'Ndugu ' . $full_name . ' ' . $middle_name . ' ' . $last_name . ', umelipa TSH ' . number_format($new_balance) . ' leo tarehe ' . $date . ' - ' . $comp_name . '. Mpokeaji: ' . $role . '. Deni ni TSH ' . number_format($remain_loan) . '.';
 
 
    
              } else {
                  // Mdaiwa sugu - amelipa baada ya tarehe ya mwisho ya mkataba
-                 // $massage = 'Mpendwa '.$full_name.', malipo yako ya TZS '.number_format($new_balance).
+                 // $message = 'Mpendwa '.$full_name.', malipo yako ya TZS '.number_format($new_balance).
                  // ' yamepokelewa tarehe '.$date.'. Tafadhali fahamu kuwa umechelewa kulipa na sasa unahesabika kama mdaiwa sugu. '.
                  // 'Deni lako lililobaki ni TZS '.number_format($remain_loan).'. Tafadhali lipa haraka ili kuepuka hatua zaidi. - '.$comp_name.'.';
    
-                 $massage = 'Ndugu '.$full_name.', umelipa '.number_format($new_balance).' leo '.$date.' - '.$comp_name.'. Mpokeaji: '.$role.'. Malipo yako yamechelewa. Lipa haraka TZS '.number_format($remain_loan).' kuepuka hatua zaidi.';
+                 $message = 'Ndugu '.$full_name.', umelipa '.number_format($new_balance).' leo '.$date.' - '.$comp_name.'. Mpokeaji: '.$role.'. Malipo yako yamechelewa. Lipa haraka TZS '.number_format($remain_loan).' kuepuka hatua zaidi.';
 
 
                 
@@ -4237,7 +4237,7 @@ $massage = 'Ndugu ' . $full_name . ' ' . $middle_name . ' ' . $last_name . ', um
    
              //    //sms send
              // $sms = 'Umeingiza Tsh.' .$new_balance. ' kwenye Acc Yako ' . $loan_codeID . $comp_name.' Mpokeaji '.$role . ' Kiasi kilicho baki Kulipwa ni Tsh.'.$remain_loan.' Kwa malalamiko piga '.$comp_phone;
-             // $massage = $sms;
+             // $message = $sms;
              // $phone = $phones;
    
           // print_r($deni_lipa);
@@ -4249,7 +4249,7 @@ $massage = 'Ndugu ' . $full_name . ' ' . $middle_name . ' ' . $last_name . ', um
              //        exit();
           if ($company_data->sms_status == 'YES'){
            
-             $this->sendsms($phone,$massage);
+             $this->sendsms($phone,$message);
              //echo "kitu kipo";
           }elseif($company_data->sms_status == 'NO'){
           	 //echo "Hakuna kitu hapa";
@@ -5421,9 +5421,9 @@ public function previous_transfor(){
     $comp_phone = $compdata->comp_phone;
     $phone = $customer_data->phone_no;
 
-    $massage ='Tsh.'. number_format($depost) .' '. 'Iliyoingizwa Kimakosa Kwenye Mkopo wako'.' '. $comp_name . ' '.' Imetolewa' .' '. 'Kiasi Kilichobaki Kulipwa '.number_format($remain_loan).' ' . 'Kwa Msaada ' .''. $comp_phone;
+    $message ='Tsh.'. number_format($depost) .' '. 'Iliyoingizwa Kimakosa Kwenye Mkopo wako'.' '. $comp_name . ' '.' Imetolewa' .' '. 'Kiasi Kilichobaki Kulipwa '.number_format($remain_loan).' ' . 'Kwa Msaada ' .''. $comp_phone;
 
-    $this->sendsms($phone,$massage);
+    $this->sendsms($phone,$message);
 
      //    echo "<pre>";
      // print_r($phone);
@@ -7194,7 +7194,7 @@ echo $this->queries->fetch_loancustomer($this->input->post('customer_id'));
         $first_name = $data_sms->f_name;
         $midle_name = $data_sms->m_name;
         $last_name = $data_sms->l_name;
-        $massage = 'Ndugu, ' .$first_name . ' ' .$midle_name . ' ' .$last_name . ' ' .'Umelipa faini ya Tsh.'. number_format($penart_paid) . ' '.$comp_name .' kwa msaada 0762178026';
+        $message = 'Ndugu, ' .$first_name . ' ' .$midle_name . ' ' .$last_name . ' ' .'Umelipa faini ya Tsh.'. number_format($penart_paid) . ' '.$comp_name .' kwa msaada 0762178026';
         
 			 // print_r($username);
 			 //     exit();
@@ -7224,18 +7224,18 @@ echo $this->queries->fetch_loancustomer($this->input->post('customer_id'));
       			$this->update_paidPenart($loan_id,$update_paid);
       			$this->insert_income($comp_id,$inc_id,$blanch_id,$customer_id,$username,$penart_paid,$penart_date,$loan_id,$group_id);
       			$this->session->set_flashdata('massage','Tsh. '.$penart_paid .' Paid successfully');
-      			$this->sendsms($phone,$massage);
+      			$this->sendsms($phone,$message);
 			     	}elseif($penart == FALSE){
 			     $this->insert_income($comp_id,$inc_id,$blanch_id,$customer_id,$username,$penart_paid,$penart_date,$loan_id,$group_id);
                  $this->insert_penartPaid($loan_id,$inc_id,$blanch_id,$comp_id,$penart_paid,$username,$customer_id,$penart_date,$group_id);
-                 $this->sendsms($phone,$massage);
+                 $this->sendsms($phone,$message);
                  $this->session->set_flashdata('massage','Tsh. '.$penart_paid .' Paid successfully');
 
 			     		}
 			     
 			     }else{	
 			  $this->insert_income($comp_id,$inc_id,$blanch_id,$customer_id,$username,$penart_paid,$penart_date,$loan_id,$group_id);
-			  $this->sendsms($phone,$massage);
+			  $this->sendsms($phone,$message);
 			  $this->session->set_flashdata('massage','Tsh. '.$penart_paid .' Paid successfully');
 			     }
 			  // //print_r($alphabet);
@@ -7941,7 +7941,7 @@ public function send_email(){
            $empl_id  = $this->input->post('empl_id[]');
            $comp_id  = $this->input->post('comp_id');
            $send_email  = $this->input->post('send_email');
-           $massage  = $this->input->post('massage');
+           $message  = $this->input->post('massage');
           
             //    echo "<pre>";
             // print_r($empl_id);
@@ -7952,7 +7952,7 @@ public function send_email(){
            
           for($i=0; $i<count($empl_id);$i++) {
         $this->db->query("INSERT INTO   tbl_email_send (`empl_id`,`comp_id` ,`send_email`,`massage`) 
-        VALUES ('".$empl_id[$i]."','$comp_id','$send_email','$massage')");
+        VALUES ('".$empl_id[$i]."','$comp_id','$send_email','$message')");
          
           }
            $this->load->model('queries');
@@ -7960,14 +7960,14 @@ public function send_email(){
            $data = $this->gets_customerData($comp_id);
                   //echo "<pre>";
                 //print_r($data);
-                 ///print_r($massage);
+                 ///print_r($message);
                 //print_r($name_info);
                  //print_r($send_email);
                  //print_r($phone_info);
                 // echo "</pre>";
                   //exit();
             for ($i=0; $i<count($data); $i++) { 
-          $this->sendEmail($data[$i]->empl_email,$send_email,$massage);
+          $this->sendEmail($data[$i]->empl_email,$send_email,$message);
                  //print_r($data[$i]->empl_email);
               }
                 //exit();
@@ -8549,11 +8549,11 @@ $this->load->view('admin/sms_history',['history'=>$history,'sms_jumla'=>$sms_jum
       //   }
 
 
-    // function sendEmail($data,$send_email,$massage){
+    // function sendEmail($data,$send_email,$message){
     //     // $from = $send_email;
     //     // $to = $data;
     //     // $subject = "MikopoSoft";
-    //     // $message   = $massage;
+    //     // $message   = $message;
     //     // $headers = "from:". $from;
     //     // mail($to,$subject,$message,$headers);
     // }
@@ -8569,13 +8569,13 @@ $this->load->view('admin/sms_history',['history'=>$history,'sms_jumla'=>$sms_jum
          
         $compdata = $this->queries->get_companyData($comp_id);
         $comp_name=$compdata->comp_name;
-        $massage = 'Habari, namba yako ya siri kwa ajili ya kutolewa mkopo ni ' . $code . '. Asante kwa kuchagua huduma zetu. - ' . $comp_name;
+        $message = 'Habari, namba yako ya siri kwa ajili ya kutolewa mkopo ni ' . $code . '. Asante kwa kuchagua huduma zetu. - ' . $comp_name;
 
         $phone = '0'.substr($phones, 3,10);
         // print_r($phone);
         //      exit();
        
-        $this->sendsms($phone,$massage);
+        $this->sendsms($phone,$message);
         $this->session->set_flashdata('massage','Namba ya siri ya mkopo imetumwa kwa mteja tayari ikiwa hijafika resend tena');
         return redirect('admin/data_with_depost/'.$customer_id);
       }
@@ -10099,8 +10099,8 @@ public function samehe_faini($customer_id){
         $first_name = $data_sms->f_name;
         $midle_name = $data_sms->m_name;
         $last_name = $data_sms->l_name;
-        $massage = 'Ndugu, ' .$first_name . ' ' .$midle_name . ' ' .$last_name . ' ' .'Umesamehewa faini ya kulaza rejesho '.$comp_name .' epuka kuchajiwa faini ukilaza rejesho';
-		// print_r($massage);
+        $message = 'Ndugu, ' .$first_name . ' ' .$midle_name . ' ' .$last_name . ' ' .'Umesamehewa faini ya kulaza rejesho '.$comp_name .' epuka kuchajiwa faini ukilaza rejesho';
+		// print_r($message);
 		//     exit();
 		$this->load->model('queries');
 		if ($this->queries->insert_msamaha($data)) {
@@ -10108,7 +10108,7 @@ public function samehe_faini($customer_id){
 		}else{
 		 $this->session->set_flashdata("massage",'Umefanikiwa Kusamehe Faini Ahsante');	
 		}
-		//$this->sendsms($phone,$massage);
+		//$this->sendsms($phone,$message);
 		return redirect('admin/data_with_depost/'.$customer_id);
 	}
 	$this->data_with_depost();
@@ -10225,11 +10225,11 @@ public function send_remindersms($customer_id,$comp_id,$loan_status){
 	$first_name = $data_sms->f_name;
 	$midle_name = $data_sms->m_name;
 	$last_name = $data_sms->l_name;
-	$massage = 'Ndugu, ' .$first_name . ' ' .$midle_name . ' ' .$last_name . ' ' .$sms;
+	$message = 'Ndugu, ' .$first_name . ' ' .$midle_name . ' ' .$last_name . ' ' .$sms;
 	//    echo "<pre>";
-	// print_r($massage);
+	// print_r($message);
 	//      exit();
-	$this->sendsms($phone,$massage);
+	$this->sendsms($phone,$message);
 
 }
 
@@ -10244,12 +10244,12 @@ public function send_staff_sms($empl_id,$comp_id,$loan_status){
     $full_name = $staff_sms->empl_name;
     $phone = $phone_number;
 
-    $massage = 'Ndugu, '. $full_name . ' '. $sms;
-    // print_r($massage);
+    $message = 'Ndugu, '. $full_name . ' '. $sms;
+    // print_r($message);
     //  exit();
-    $this->sendsms($phone,$massage);
+    $this->sendsms($phone,$message);
     
-     // print_r($massage);
+     // print_r($message);
      // exit();
 }
 
@@ -10296,15 +10296,15 @@ public function send_staff_sms($empl_id,$comp_id,$loan_status){
 // //$this->sendgrid();
 //  $send_email = "kochatest@gmail.com";
 //  $data = "samweldamian12@gmail.com";
-//  $massage = "NAKUPENDA SANA";
+//  $message = "NAKUPENDA SANA";
 //  // print_r($send_email);
-//  // print_r($massage);
+//  // print_r($message);
 //  //       exit();
 //  $email = new \SendGrid\Mail\Mail();
 //  $email->setFrom($send_email);
 //  $email->setSubject("MikopoSoft");
 //  $email->addTo($data);
-//  $email->addContent("text/plain",$massage);
+//  $email->addContent("text/plain",$message);
 //  $email->addContent(
 
 //   "text/html", "<strong>and easy to do anywhere, even with PHP</strong>"
@@ -10313,8 +10313,8 @@ public function send_staff_sms($empl_id,$comp_id,$loan_status){
 
 //send sms function
       //beem Api
-// function sendsms($phone,$massage){
-//     $message = urlencode($massage);
+// function sendsms($phone,$message){
+//     $message = urlencode($message);
 //     $sender = 'SEDEMO'; 
 //     $api_key = 'd4af7dff16f3ab47';
 //     $secret_key = 'MjIyNWIwODNmNTNjZTg3OTI2MDBlNGQyYThjNTFjMzAwNmIzMjBhMmJhMGFjNDUxYjRmNmRhOTYxZGY3ZGZiOA==';
@@ -10323,7 +10323,7 @@ public function send_staff_sms($empl_id,$comp_id,$loan_status){
 //     'source_addr' => 'INFO',
 //     'encoding'=>0,
 //     'schedule_time' => '',
-//     'message' => $massage,
+//     'message' => $message,
 //     'recipients' => [array('recipient_id' => '1','dest_addr'=>$phone)]
 // );
 
@@ -10357,11 +10357,11 @@ public function send_staff_sms($empl_id,$comp_id,$loan_status){
 // }
 
 //next sms Api
-// function sendsms($phone,$massage){
+// function sendsms($phone,$message){
 
 //     //$phone = "255753871034";
-//     //$massage = "haloo there pokea salaam";
-//     $address = array("from"=>"NEXTSMS","to"=>$phone,"text"=>$massage);
+//     //$message = "haloo there pokea salaam";
+//     $address = array("from"=>"NEXTSMS","to"=>$phone,"text"=>$message);
 //     $curl = curl_init();
 //     curl_setopt_array($curl, array(
 //     CURLOPT_URL => 'https://messaging-service.co.tz/api/sms/v1/text/single',
@@ -10388,35 +10388,66 @@ public function send_staff_sms($empl_id,$comp_id,$loan_status){
 
 
 
+ public function sendsms($phone, $message)
+{
+    $url = "https://texvia-api.kadolab.com/3rdparty/v1/messages";
 
-public function sendsms($phone,$massage){
-	//public function sendsms(){f
-	//$phone = '255628323760';
-	//$massage = 'mapenzi yanauwa';
-	$api_key = 'PE3CBF71w4MpSnkZ';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-	//$api_key = 'qFzd89PXu1e/DuwbwxOE5uUBn6';
-	//$curl = curl_init();
-  $url = "https://sms-api.kadolab.com/api/send-sms";
-  $token = "191|FGRJnywvB1trzqoh2fkDFMtkZmVIHS12IqrKwYcB466134d7";
+    $username = getenv('user_c67pGjxsTA0kzjJa');
+    $password = getenv('5vACDJSapaiZl6gB7ynMUPouc9vUOH0S');
 
-  $ch = curl_init($url);
-  curl_setopt($ch, CURLOPT_POST, true);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Authorization: Bearer '. $token,
-    'Content-Type: application/json',
-  ]);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-    "phoneNumbers" => ["+$phone"],
-    "message" => $massage
-  ]));
+  
 
-$server_output = curl_exec($ch);
-curl_close ($ch);
+    if (!$username || !$password) {
+        throw new RuntimeException(
+            'SMS username or password is not configured.'
+        );
+    }
 
-//print_r($server_output);
+    $payload = [
+        "phoneNumbers" => ["+" . ltrim($phone, "+")],
+        "message" => $message
+    ];
+
+    $ch = curl_init($url);
+
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+
+        // Basic authentication
+        CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+        CURLOPT_USERPWD => $username . ':' . $password,
+
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Accept: application/json'
+        ],
+
+        CURLOPT_POSTFIELDS => json_encode($payload),
+        CURLOPT_TIMEOUT => 30
+    ]);
+
+    $serverOutput = curl_exec($ch);
+    $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if ($serverOutput === false) {
+        $error = curl_error($ch);
+        curl_close($ch);
+
+        throw new RuntimeException("SMS request failed: " . $error);
+    }
+
+    curl_close($ch);
+
+    if ($httpStatus < 200 || $httpStatus >= 300) {
+        throw new RuntimeException(
+            "SMS API returned HTTP {$httpStatus}: {$serverOutput}"
+        );
+    }
+
+    return json_decode($serverOutput, true);
 }
-
+  
 
 	  	//session destroy
 	  public function __construct(){
